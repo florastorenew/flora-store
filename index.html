@@ -836,16 +836,16 @@ function renderProducts(list) {
         ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
         ${p.outOfStock ? `<div class="oos-badge"><span>نفذت الكمية</span></div>` : `
         <div class="product-actions-overlay">
-          <button class="overlay-btn" onclick="openModal(${p.id});event.stopPropagation()" title="تفاصيل"><i class="fas fa-eye"></i></button>
-          <button class="overlay-btn" onclick="addToCart(${p.id});event.stopPropagation()" title="أضيفي للسلة"><i class="fas fa-shopping-bag"></i></button>
+          <button class="overlay-btn" onclick="openModal('${p.id}');event.stopPropagation()" title="تفاصيل"><i class="fas fa-eye"></i></button>
+          <button class="overlay-btn" onclick="addToCart('${p.id}');event.stopPropagation()" title="أضيفي للسلة"><i class="fas fa-shopping-bag"></i></button>
         </div>`}
       </div>
-      <div class="product-info" onclick="openModal(${p.id})">
+      <div class="product-info" onclick="openModal('${p.id}')">
         <div class="product-name">${p.name}</div>
         <div class="product-desc">${p.desc || p.description || 'منتج مميز من فلورا ستور 🌸'}</div>
         <div class="product-footer">
           <div class="product-price">${p.price.toLocaleString()} <span>جنيه</span></div>
-          ${p.outOfStock ? `<span style="font-size:0.75rem;color:#e67e22;font-weight:700">نفذت الكمية</span>` : `<button class="add-cart-btn" onclick="addToCart(${p.id});event.stopPropagation()"><i class="fas fa-plus"></i></button>`}
+          ${p.outOfStock ? `<span style="font-size:0.75rem;color:#e67e22;font-weight:700">نفذت الكمية</span>` : `<button class="add-cart-btn" onclick="addToCart('${p.id}');event.stopPropagation()"><i class="fas fa-plus"></i></button>`}
         </div>
       </div>
     </div>
@@ -920,7 +920,7 @@ function changeQty(id, d) {
 }
 
 function removeFromCart(id) {
-  cart = cart.filter(x => x.id !== id);
+  cart = cart.filter(x => String(x.id) !== String(id));
   saveCart(); updateCartCount(); renderCart();
 }
 
