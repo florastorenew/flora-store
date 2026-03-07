@@ -756,10 +756,13 @@ window.addEventListener('load', () => {
     const l = document.getElementById('loader');
     l.style.opacity = '0';
     setTimeout(() => l.style.display = 'none', 600);
-  }, 1600);
+  }, 800);
   createPetals();
   updateCartCount();
   updateShippingDisplay();
+  // show page immediately, load cloud in background
+  products = JSON.parse(localStorage.getItem('flora_products') || '[]');
+  renderProducts(products);
   loadFromCloud();
 });
 
