@@ -993,6 +993,11 @@ function sendWhatsAppOrder() {
   msg += `━━━━━━━━━━━━━━━━━━\n`;
   msg += `شكراً لاختيارك فلورا ستور 🌸`;
   window.open(`https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
+  cart = [];
+  saveCart();
+  updateCartCount();
+  renderCart();
+  closeCart();
 }
 
 // ===== MODAL =====
