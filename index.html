@@ -698,29 +698,18 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
 </div>
 
 <script>
-// ===== GITHUB CONFIG =====
-const GH_USER = 'mahmoudelgebaly313-dot';
-const GH_REPO = 'flora-store';
-const GH_FILE = 'products.json';
-const GH_TOKEN = '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';
-const GH_API = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${GH_FILE}`;
+// ===== GIST CONFIG =====
+const GIST_ID = '031965a9b8eae4641081a8625ee60246';
+const GIST_API = `https://api.github.com/gists/${GIST_ID}`;
 
 async function loadFromCloud() {
   try {
-    const res = await fetch(GH_API + '?t=' + Date.now(), {
-      headers: { 'Authorization': `token ${GH_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
-    });
-    if (res.status === 404) {
-      products = [];
-      renderProducts([]);
-      return;
-    }
+    const res = await fetch(GIST_API + '?t=' + Date.now());
     const data = await res.json();
-    const decoded = JSON.parse(atob(data.content.replace(/
-/g,'')));
-    products = decoded.products || [];
+    const raw = data.files['products.json'].content;
+    const parsed = JSON.parse(raw);
+    products = parsed.products || [];
     localStorage.setItem('flora_products', JSON.stringify(products));
-    localStorage.setItem('flora_sha', data.sha);
     renderProducts(currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory));
     updateCatCounts();
   } catch(e) {
@@ -732,16 +721,11 @@ async function loadFromCloud() {
 
 async function saveToCloud() {
   try {
-    const sha = localStorage.getItem('flora_sha');
-    const body = { message: 'update products', content: btoa(unescape(encodeURIComponent(JSON.stringify({products})))), };
-    if (sha) body.sha = sha;
-    const res = await fetch(GH_API, {
-      method: 'PUT',
-      headers: { 'Authorization': `token ${GH_TOKEN}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+    await fetch(GIST_API, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ files: { 'products.json': { content: JSON.stringify({products}) } } })
     });
-    const data = await res.json();
-    if (data.content) localStorage.setItem('flora_sha', data.content.sha);
     localStorage.setItem('flora_products', JSON.stringify(products));
   } catch(e) {
     console.error('Cloud save error:', e);
