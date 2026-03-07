@@ -652,13 +652,8 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
             <input type="text" id="p-badge" placeholder="مثال: جديد | أكتر مبيعاً | عرض خاص" />
           </div>
           <div class="form-group">
-            <label>صورة المنتج</label>
-            <div class="upload-area" onclick="document.getElementById('p-img').click()">
-              <i class="fas fa-cloud-upload-alt"></i>
-              <p>اضغطي لاختيار صورة</p>
-              <p style="font-size:0.75rem;margin-top:0.3rem;color:var(--rose-light)">PNG, JPG, WEBP</p>
-              <input type="file" id="p-img" accept="image/*" onchange="previewImg(this)" />
-            </div>
+            <label>رابط صورة المنتج</label>
+            <input type="text" id="p-img-url" placeholder="https://example.com/image.jpg" style="width:100%;padding:0.7rem;border:1.5px solid var(--rose-light);border-radius:10px;font-family:inherit;font-size:0.95rem" oninput="previewImgUrl(this.value)" />
             <img id="p-img-preview" style="width:100%;border-radius:12px;margin-top:0.8rem;display:none;max-height:200px;object-fit:cover" />
           </div>
           <button class="admin-submit" onclick="addProduct()">
@@ -837,7 +832,7 @@ function renderProducts(list) {
   grid.innerHTML = list.map((p, i) => `
     <div class="product-card" style="animation:heroIn 0.5s ease ${i*0.06}s both">
       <div class="product-img-wrap">
-        ${p.img ? `<img src="${p.img}" alt="${p.name}" loading="lazy">` : `<div class="product-no-img">${p.emoji || catEmoji[p.category] || '🌸'}</div>`}
+        ${(p.img||p.image) ? `<img src="${p.img||p.image}" alt="${p.name}" loading="lazy">` : `<div class="product-no-img">${p.emoji || catEmoji[p.category] || '🌸'}</div>`}
         ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
         ${p.outOfStock ? `<div class="oos-badge"><span>نفذت الكمية</span></div>` : `
         <div class="product-actions-overlay">
@@ -847,7 +842,7 @@ function renderProducts(list) {
       </div>
       <div class="product-info" onclick="openModal(${p.id})">
         <div class="product-name">${p.name}</div>
-        <div class="product-desc">${p.desc || 'منتج مميز من فلورا ستور 🌸'}</div>
+        <div class="product-desc">${p.desc || p.description || 'منتج مميز من فلورا ستور 🌸'}</div>
         <div class="product-footer">
           <div class="product-price">${p.price.toLocaleString()} <span>جنيه</span></div>
           ${p.outOfStock ? `<span style="font-size:0.75rem;color:#e67e22;font-weight:700">نفذت الكمية</span>` : `<button class="add-cart-btn" onclick="addToCart(${p.id});event.stopPropagation()"><i class="fas fa-plus"></i></button>`}
@@ -1002,13 +997,14 @@ function sendWhatsAppOrder() {
 
 // ===== MODAL =====
 function openModal(id) {
-  const p = products.find(x => x.id === id);
+  const p = products.find(x => String(x.id) === String(id));
   if (!p) return;
   document.getElementById('modal-name').textContent = p.name;
-  document.getElementById('modal-desc').textContent = p.desc || 'منتج مميز من فلورا ستور 🌸';
+  document.getElementById('modal-desc').textContent = p.desc || p.description || 'منتج مميز من فلورا ستور 🌸';
   document.getElementById('modal-price').textContent = `${p.price.toLocaleString()} جنيه`;
-  document.getElementById('modal-img-wrap').innerHTML = p.img
-    ? `<img class="modal-img" src="${p.img}" alt="${p.name}">`
+  const imgSrc = p.img || p.image;
+  document.getElementById('modal-img-wrap').innerHTML = imgSrc
+    ? `<img class="modal-img" src="${imgSrc}" alt="${p.name}">`
     : `<div class="modal-no-img">${p.emoji || catEmoji[p.category] || '🌸'}</div>`;
   document.getElementById('modal-add-btn').onclick = () => { addToCart(id); closeModalDirect(); };
   document.getElementById('modal-overlay').classList.add('open');
@@ -1062,6 +1058,12 @@ function previewImg(input) {
   };
   reader.readAsDataURL(file);
 }
+function previewImgUrl(url) {
+  const prev = document.getElementById('p-img-preview');
+  if (url) { prev.src = url; prev.style.display = 'block'; imgData = url; }
+  else { prev.style.display = 'none'; imgData = null; }
+}
+
 function addProduct() {
   const name = document.getElementById('p-name').value.trim();
   const price = parseFloat(document.getElementById('p-price').value);
@@ -1091,7 +1093,7 @@ function addProduct() {
     });
   }
   showToast(`✅ "${name}" اتضافت بنجاح`);
-  ['p-name','p-desc','p-price','p-emoji','p-badge'].forEach(id => document.getElementById(id).value = '');
+  ['p-name','p-desc','p-price','p-emoji','p-badge','p-img-url'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('p-img-preview').style.display = 'none';
   document.getElementById('p-img').value = '';
   imgData = null;
