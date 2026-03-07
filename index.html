@@ -698,19 +698,29 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
 </div>
 
 <script>
-// ===== JSONBIN CONFIG =====
-const BIN_ID = '69abec28d0ea881f40f87c7c';
-const API_KEY = '$2a$10$yMkq6yrlDE5SGmX.nL8zleNd26Mlg2XS4/PzHBgAb2ROsXtsb/wRi';
-const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+// ===== GITHUB CONFIG =====
+const GH_USER = 'mahmoudelgebaly313-dot';
+const GH_REPO = 'flora-store';
+const GH_FILE = 'products.json';
+const GH_TOKEN = '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';
+const GH_API = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${GH_FILE}`;
 
 async function loadFromCloud() {
   try {
-    const res = await fetch(BIN_URL + '/latest', {
-      headers: { 'X-Master-Key': API_KEY }
+    const res = await fetch(GH_API + '?t=' + Date.now(), {
+      headers: { 'Authorization': `token ${GH_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
     });
+    if (res.status === 404) {
+      products = [];
+      renderProducts([]);
+      return;
+    }
     const data = await res.json();
-    products = data.record.products || [];
+    const decoded = JSON.parse(atob(data.content.replace(/
+/g,'')));
+    products = decoded.products || [];
     localStorage.setItem('flora_products', JSON.stringify(products));
+    localStorage.setItem('flora_sha', data.sha);
     renderProducts(currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory));
     updateCatCounts();
   } catch(e) {
@@ -722,14 +732,16 @@ async function loadFromCloud() {
 
 async function saveToCloud() {
   try {
-    await fetch(BIN_URL, {
+    const sha = localStorage.getItem('flora_sha');
+    const body = { message: 'update products', content: btoa(unescape(encodeURIComponent(JSON.stringify({products})))), };
+    if (sha) body.sha = sha;
+    const res = await fetch(GH_API, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': API_KEY
-      },
-      body: JSON.stringify({ products })
+      headers: { 'Authorization': `token ${GH_TOKEN}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
     });
+    const data = await res.json();
+    if (data.content) localStorage.setItem('flora_sha', data.content.sha);
     localStorage.setItem('flora_products', JSON.stringify(products));
   } catch(e) {
     console.error('Cloud save error:', e);
@@ -738,7 +750,6 @@ async function saveToCloud() {
 }
 
 function updateCatCounts() {
-  // update filter count display
   const list = currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory);
   document.getElementById('filter-count').textContent = list.length ? `عرض ${list.length} منتج` : '';
 }
