@@ -998,6 +998,7 @@ function sendWhatsAppOrder() {
   updateCartCount();
   renderCart();
   closeCart();
+
 }
 
 // ===== MODAL =====
@@ -1087,8 +1088,17 @@ function addProduct() {
     image: imgUrl || imgData || null,
   };
   if (editingId) {
-    const idx = products.findIndex(x => x.id === editingId);
+    const idx = products.findIndex(x => String(x.id) === String(editingId));
     if (idx !== -1) products[idx] = p;
+    // Update in Supabase
+    fetch(`${SB_URL}/rest/v1/products?id=eq.${editingId}`, {
+      method: 'PATCH',
+      headers: { ...SB_HEADERS, 'Prefer': 'return=representation' },
+      body: JSON.stringify({ name: p.name, description: p.desc||p.description||'', price: p.price, category: p.category, emoji: p.emoji, badge: p.badge, image: p.img||p.image||null })
+    });
+    localStorage.setItem('flora_products', JSON.stringify(products));
+    renderProducts(currentCategory === 'all' ? products : products.filter(x => x.category === currentCategory));
+    loadAdminProducts();
     editingId = null;
     document.getElementById('submit-btn-txt').textContent = 'إضافة المنتج';
   } else {
@@ -1120,9 +1130,14 @@ function loadAdminProducts() {
         <div class="admin-p-price">${p.price.toLocaleString()} جم · ${catNames[p.category]||p.category}</div>
       </div>
       <div class="admin-p-actions">
-        <button class="admin-p-btn edit" onclick="editProduct(${p.id})">✏️ تعديل</button>
-        <button class="admin-p-btn ${p.outOfStock?'instock':'oos'}" onclick="toggleOutOfStock(${p.id})">${p.outOfStock?'✅ متاح':'🚫 خلص'}</button>
-        <button class="admin-p-btn del" onclick="deleteProduct(${p.id})">🗑️</button>
+        <button class="admin-p-btn edit" onclick="editProduct('${p.id}')">✏️ تعديل</button>
+        <button class="admin-p-btn ${p.outOfStock?'instock':'oos'}" onclick="toggleOutOfStock('${p.id}')">${p.outOfStock?'✅ متاح':'🚫 خلص'}</button>
+        <button class="admin-p-btn del" onclick="deleteProduct('${p.id}')">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+uct(${p.id})">🗑️</button>
       </div>
     </div>
   `).join('');
@@ -1159,7 +1174,15 @@ function editProduct(id) {
   document.getElementById('p-cat').value = p.category;
   document.getElementById('p-emoji').value = p.emoji || '';
   document.getElementById('p-badge').value = p.badge || '';
-  if (p.img||p.image) { imgData = p.img||p.image; const prev = document.getElementById('p-img-preview'); prev.src = p.img||p.image; prev.style.display = 'block'; }
+  const imgSrc = p.img || p.image || '';
+  if (imgSrc) {
+    imgData = imgSrc;
+    const prev = document.getElementById('p-img-preview');
+    prev.src = imgSrc;
+    prev.style.display = 'block';
+    const urlInput = document.getElementById('p-img-url');
+    if (urlInput) urlInput.value = imgSrc;
+  }yle.display = 'block'; }
   document.getElementById('submit-btn-txt').textContent = 'حفظ التعديلات';
   document.querySelectorAll('.admin-tab')[0].click();
   showToast('✏️ عدلي المنتج واحفظيه');
