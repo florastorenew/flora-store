@@ -135,13 +135,14 @@ section { padding:6rem 3rem; position:relative; }
 .empty-state i { font-size:3rem; color:var(--rose-light); margin-bottom:1rem; display:block; }
 
 /* SHIPPING */
-.shipping-section { background:linear-gradient(135deg,var(--rose-pale) 0%,var(--nude) 100%); }
-.shipping-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:2rem; max-width:900px; margin:0 auto; }
-.shipping-card { text-align:center; padding:2rem 1.5rem; background:rgba(255,255,255,0.7); border-radius:20px; border:1px solid rgba(255,255,255,0.9); backdrop-filter:blur(10px); transition:transform 0.3s; }
+.shipping-section { background:linear-gradient(135deg,var(--rose-pale) 0%,var(--nude) 100%); padding:2rem 3rem !important; }
+.shipping-section .section-header { display:none; }
+.shipping-grid { display:flex; flex-wrap:wrap; gap:1rem; max-width:1100px; margin:0 auto; justify-content:center; }
+.shipping-card { text-align:center; padding:1rem 1.2rem; background:rgba(255,255,255,0.8); border-radius:14px; border:1px solid rgba(255,255,255,0.9); backdrop-filter:blur(10px); transition:transform 0.3s; }
 .shipping-card:hover { transform:translateY(-5px); }
-.shipping-icon { width:60px; height:60px; background:linear-gradient(135deg,var(--rose),var(--rose-deep)); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1.2rem; font-size:1.4rem; color:#fff; box-shadow:0 8px 20px rgba(201,123,132,0.3); }
-.shipping-card h3 { font-size:1rem; font-weight:700; margin-bottom:0.5rem; color:var(--dark); }
-.shipping-card p { font-size:0.85rem; color:var(--text-light); line-height:1.6; }
+.shipping-icon { width:40px; height:40px; background:linear-gradient(135deg,var(--rose),var(--rose-deep)); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 0.6rem; font-size:1rem; color:#fff; box-shadow:0 4px 12px rgba(201,123,132,0.3); }
+.shipping-card h3 { font-size:0.85rem; font-weight:700; margin-bottom:0.3rem; color:var(--dark); }
+.shipping-card p { font-size:0.75rem; color:var(--text-light); line-height:1.6; }
 
 /* SOCIAL */
 .social-section { background:#fff; }
