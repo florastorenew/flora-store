@@ -961,9 +961,6 @@ function selectColor(id, color) {
 function closeColorPicker() {
   document.getElementById('color-picker-overlay').classList.remove('open');
 }
-  saveCart(); updateCartCount(); renderCart();
-  showToast(`✅ "${p.name}" اتضافت للسلة`);
-}
 
 function renderCart() {
   const container = document.getElementById('cart-items');
