@@ -586,7 +586,24 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
       <div class="modal-name" id="modal-name"></div>
       <div class="modal-desc" id="modal-desc"></div>
       <div class="modal-price" id="modal-price"></div>
+
+      <!-- عداد الكمية -->
+      <div style="display:flex;align-items:center;gap:1rem;margin:1.2rem 0">
+        <span style="font-size:0.9rem;color:var(--text-light)">الكمية:</span>
+        <div style="display:flex;align-items:center;gap:0.6rem;background:var(--rose-pale);border-radius:20px;padding:0.3rem 0.8rem">
+          <button onclick="changeModalQty(-1)" style="background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--rose-deep);width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-weight:700">−</button>
+          <span id="modal-qty" style="font-size:1rem;font-weight:700;color:var(--dark);min-width:20px;text-align:center">1</span>
+          <button onclick="changeModalQty(1)" style="background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--rose-deep);width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-weight:700">+</button>
+        </div>
+      </div>
+
       <button class="modal-add-btn" id="modal-add-btn"><i class="fas fa-shopping-bag"></i> أضيفي للسلة</button>
+
+      <!-- منتجات مشابهة -->
+      <div id="related-products-wrap" style="margin-top:1.5rem;border-top:1px solid var(--rose-pale);padding-top:1.2rem">
+        <div style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.8rem;font-weight:600">✨ منتجات مشابهة</div>
+        <div id="related-products" style="display:flex;gap:0.8rem;overflow-x:auto;padding-bottom:0.5rem"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -1088,9 +1105,39 @@ function openModal(id) {
   document.getElementById('modal-img-wrap').innerHTML = imgSrc
     ? `<img class="modal-img" src="${imgSrc}" alt="${p.name}">`
     : `<div class="modal-no-img">${p.emoji || catEmoji[p.category] || '🌸'}</div>`;
-  document.getElementById('modal-add-btn').onclick = () => { addToCart(id); closeModalDirect(); };
+  document.getElementById('modal-add-btn').onclick = () => { 
+    const qty = parseInt(document.getElementById('modal-qty').textContent) || 1;
+    for(let i = 0; i < qty; i++) addToCart(id);
+    closeModalDirect(); 
+  };
+  // Reset qty
+  document.getElementById('modal-qty').textContent = '1';
+  // Related products
+  const related = products.filter(x => x.category === p.category && String(x.id) !== String(id) && !x.outOfStock).slice(0,4);
+  const relWrap = document.getElementById('related-products-wrap');
+  const relContainer = document.getElementById('related-products');
+  if (related.length > 0) {
+    relWrap.style.display = 'block';
+    relContainer.innerHTML = related.map(r => `
+      <div onclick="openModal('${r.id}')" style="min-width:100px;cursor:pointer;flex-shrink:0;text-align:center">
+        <div style="width:100px;height:100px;border-radius:12px;overflow:hidden;background:var(--rose-pale);margin-bottom:0.4rem;display:flex;align-items:center;justify-content:center">
+          ${(r.img||r.image) ? `<img src="${r.img||r.image}" style="width:100%;height:100%;object-fit:cover">` : `<span style="font-size:2rem">${r.emoji||catEmoji[r.category]||'🌸'}</span>`}
+        </div>
+        <div style="font-size:0.75rem;color:var(--dark);font-weight:600;margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px">${r.name}</div>
+        <div style="font-size:0.75rem;color:var(--rose-deep);font-weight:700">${r.price.toLocaleString()} جم</div>
+      </div>
+    `).join('');
+  } else {
+    relWrap.style.display = 'none';
+  }
   document.getElementById('modal-overlay').classList.add('open');
 }
+function changeModalQty(d) {
+  const el = document.getElementById('modal-qty');
+  const current = parseInt(el.textContent) || 1;
+  el.textContent = Math.max(1, current + d);
+}
+
 function closeModalOutside(e) { if (e.target === document.getElementById('modal-overlay')) closeModalDirect(); }
 function closeModalDirect() { document.getElementById('modal-overlay').classList.remove('open'); }
 
