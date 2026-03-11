@@ -687,8 +687,12 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
           </div>
           <div class="form-group">
             <label>رابط صورة المنتج</label>
-            <input type="text" id="p-img-url" placeholder="https://example.com/image.jpg" style="width:100%;padding:0.7rem;border:1.5px solid var(--rose-light);border-radius:10px;font-family:inherit;font-size:0.95rem" oninput="previewImgUrl(this.value)" />
-            <img id="p-img-preview" style="width:100%;border-radius:12px;margin-top:0.8rem;display:none;max-height:200px;object-fit:cover" />
+            <input type="text" id="p-img-url" placeholder="رابط الصورة الأولى (الرئيسية)" style="width:100%;padding:0.7rem;border:1.5px solid var(--rose-light);border-radius:10px;font-family:inherit;font-size:0.95rem;margin-bottom:0.5rem" oninput="previewImgUrl(this.value)" />
+            <input type="text" id="p-img-url-2" placeholder="رابط الصورة الثانية (اختياري)" style="width:100%;padding:0.7rem;border:1.5px solid var(--rose-light);border-radius:10px;font-family:inherit;font-size:0.95rem;margin-bottom:0.5rem" oninput="previewExtraImgs()" />
+            <input type="text" id="p-img-url-3" placeholder="رابط الصورة الثالثة (اختياري)" style="width:100%;padding:0.7rem;border:1.5px solid var(--rose-light);border-radius:10px;font-family:inherit;font-size:0.95rem;margin-bottom:0.5rem" oninput="previewExtraImgs()" />
+            <input type="text" id="p-img-url-4" placeholder="رابط الصورة الرابعة (اختياري)" style="width:100%;padding:0.7rem;border:1.5px solid var(--rose-light);border-radius:10px;font-family:inherit;font-size:0.95rem" oninput="previewExtraImgs()" />
+            <div id="p-img-previews" style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.8rem"></div>
+            <img id="p-img-preview" style="display:none" />
           </div>
 
           <!-- COLORS -->
@@ -766,7 +770,8 @@ async function loadFromCloud() {
       badge: p.badge,
       image: p.image,
       outOfStock: p.out_of_stock,
-      colors: p.colors || []
+      colors: p.colors || [],
+      images: p.images || []
     }));
     localStorage.setItem('flora_products', JSON.stringify(products));
     renderProducts(currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory));
@@ -787,7 +792,7 @@ async function addProductToCloud(p) {
   const res = await fetch(`${SB_URL}/rest/v1/products`, {
     method: 'POST',
     headers: { ...SB_HEADERS, 'Prefer': 'return=representation' },
-    body: JSON.stringify({ name: p.name, description: p.desc || p.description || '', price: p.price, category: p.category, emoji: p.emoji, badge: p.badge, image: p.img || p.image || null, out_of_stock: false, colors: p.colors || [] })
+    body: JSON.stringify({ name: p.name, description: p.desc || p.description || '', price: p.price, category: p.category, emoji: p.emoji, badge: p.badge, image: p.img || p.image || null, out_of_stock: false, colors: p.colors || [], images: p.images || [] })
   });
   const data = await res.json();
   return data[0];
@@ -1101,10 +1106,27 @@ function openModal(id) {
   document.getElementById('modal-name').textContent = p.name;
   document.getElementById('modal-desc').textContent = p.desc || p.description || 'منتج مميز من فلورا ستور 🌸';
   document.getElementById('modal-price').textContent = `${p.price.toLocaleString()} جنيه`;
-  const imgSrc = p.img || p.image;
-  document.getElementById('modal-img-wrap').innerHTML = imgSrc
-    ? `<img class="modal-img" src="${imgSrc}" alt="${p.name}">`
-    : `<div class="modal-no-img">${p.emoji || catEmoji[p.category] || '🌸'}</div>`;
+  const allImgs = (p.images && p.images.length > 0) ? p.images : (p.img||p.image ? [p.img||p.image] : []);
+  if (allImgs.length > 1) {
+    document.getElementById('modal-img-wrap').innerHTML = `
+      <div style="position:relative;overflow:hidden;border-radius:24px 24px 0 0">
+        <div id="slider-track" style="display:flex;transition:transform 0.35s ease">
+          ${allImgs.map(u => `<img src="${u}" style="min-width:100%;width:100%;aspect-ratio:1/1;object-fit:cover" onerror="this.style.display='none'">`).join('')}
+        </div>
+        ${allImgs.length > 1 ? `
+        <button onclick="slideImg(-1)" style="position:absolute;top:50%;right:10px;transform:translateY(-50%);background:rgba(255,255,255,0.85);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center">‹</button>
+        <button onclick="slideImg(1)" style="position:absolute;top:50%;left:10px;transform:translateY(-50%);background:rgba(255,255,255,0.85);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center">›</button>
+        <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px">
+          ${allImgs.map((_,i) => `<div class="slider-dot" id="dot-${i}" style="width:7px;height:7px;border-radius:50%;background:${i===0?'#fff':'rgba(255,255,255,0.5)'};cursor:pointer" onclick="goToSlide(${i})"></div>`).join('')}
+        </div>` : ''}
+      </div>`;
+    window._sliderIdx = 0;
+    window._sliderTotal = allImgs.length;
+  } else if (allImgs.length === 1) {
+    document.getElementById('modal-img-wrap').innerHTML = `<img class="modal-img" src="${allImgs[0]}" alt="${p.name}">`;
+  } else {
+    document.getElementById('modal-img-wrap').innerHTML = `<div class="modal-no-img">${p.emoji || catEmoji[p.category] || '🌸'}</div>`;
+  }
   document.getElementById('modal-add-btn').onclick = () => { 
     const qty = parseInt(document.getElementById('modal-qty').textContent) || 1;
     for(let i = 0; i < qty; i++) addToCart(id);
@@ -1136,6 +1158,21 @@ function changeModalQty(d) {
   const el = document.getElementById('modal-qty');
   const current = parseInt(el.textContent) || 1;
   el.textContent = Math.max(1, current + d);
+}
+
+function slideImg(dir) {
+  const total = window._sliderTotal || 1;
+  window._sliderIdx = (window._sliderIdx + dir + total) % total;
+  goToSlide(window._sliderIdx);
+}
+
+function goToSlide(i) {
+  window._sliderIdx = i;
+  const track = document.getElementById('slider-track');
+  if (track) track.style.transform = `translateX(${i * 100}%)`;
+  document.querySelectorAll('.slider-dot').forEach((d, idx) => {
+    d.style.background = idx === i ? '#fff' : 'rgba(255,255,255,0.5)';
+  });
 }
 
 function closeModalOutside(e) { if (e.target === document.getElementById('modal-overlay')) closeModalDirect(); }
@@ -1188,9 +1225,21 @@ function previewImg(input) {
   reader.readAsDataURL(file);
 }
 function previewImgUrl(url) {
-  const prev = document.getElementById('p-img-preview');
-  if (url) { prev.src = url; prev.style.display = 'block'; imgData = url; }
-  else { prev.style.display = 'none'; imgData = null; }
+  previewExtraImgs();
+  imgData = url || null;
+}
+
+function previewExtraImgs() {
+  const urls = [
+    document.getElementById('p-img-url')?.value.trim(),
+    document.getElementById('p-img-url-2')?.value.trim(),
+    document.getElementById('p-img-url-3')?.value.trim(),
+    document.getElementById('p-img-url-4')?.value.trim(),
+  ].filter(u => u);
+  imgData = urls[0] || null;
+  const container = document.getElementById('p-img-previews');
+  if (!container) return;
+  container.innerHTML = urls.map(u => `<img src="${u}" style="width:70px;height:70px;border-radius:8px;object-fit:cover;border:2px solid var(--rose-light)" onerror="this.style.display='none'">`).join('');
 }
 
 // ===== COLORS =====
@@ -1246,6 +1295,12 @@ function addProduct() {
   const price = parseFloat(document.getElementById('p-price').value);
   if (!name || !price) { showToast('⚠️ اكملي اسم المنتج والسعر'); return; }
   const imgUrl = document.getElementById('p-img-url') ? document.getElementById('p-img-url').value.trim() : null;
+  const extraImages = [
+    document.getElementById('p-img-url-2')?.value.trim(),
+    document.getElementById('p-img-url-3')?.value.trim(),
+    document.getElementById('p-img-url-4')?.value.trim(),
+  ].filter(u => u);
+  const allImages = imgUrl ? [imgUrl, ...extraImages] : extraImages;
   const p = {
     id: editingId || Date.now(),
     name,
@@ -1255,8 +1310,9 @@ function addProduct() {
     category: document.getElementById('p-cat').value,
     emoji: document.getElementById('p-emoji').value.trim(),
     badge: document.getElementById('p-badge').value.trim(),
-    img: imgUrl || imgData || null,
-    image: imgUrl || imgData || null,
+    img: allImages[0] || imgData || null,
+    image: allImages[0] || imgData || null,
+    images: allImages,
     colors: document.getElementById('has-colors').checked ? [...productColors] : [],
   };
   if (editingId) {
@@ -1266,7 +1322,7 @@ function addProduct() {
     fetch(`${SB_URL}/rest/v1/products?id=eq.${editingId}`, {
       method: 'PATCH',
       headers: { ...SB_HEADERS, 'Prefer': 'return=representation' },
-      body: JSON.stringify({ name: p.name, description: p.desc||p.description||'', price: p.price, category: p.category, emoji: p.emoji, badge: p.badge, image: p.img||p.image||null, colors: p.colors||[] })
+      body: JSON.stringify({ name: p.name, description: p.desc||p.description||'', price: p.price, category: p.category, emoji: p.emoji, badge: p.badge, image: p.img||p.image||null, colors: p.colors||[], images: p.images||[] })
     });
     localStorage.setItem('flora_products', JSON.stringify(products));
     renderProducts(currentCategory === 'all' ? products : products.filter(x => x.category === currentCategory));
@@ -1283,8 +1339,9 @@ function addProduct() {
     });
   }
   showToast(`✅ "${name}" اتضافت بنجاح`);
-  ['p-name','p-desc','p-price','p-emoji','p-badge','p-img-url'].forEach(id => document.getElementById(id).value = '');
+  ['p-name','p-desc','p-price','p-emoji','p-badge','p-img-url','p-img-url-2','p-img-url-3','p-img-url-4'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
   resetColorsForm();
+  document.getElementById('p-img-previews').innerHTML = '';
   document.getElementById('p-img-preview').style.display = 'none';
   document.getElementById('p-img').value = '';
   imgData = null;
@@ -1343,14 +1400,13 @@ function editProduct(id) {
   document.getElementById('p-emoji').value = p.emoji || '';
   document.getElementById('p-badge').value = p.badge || '';
   const imgSrc = p.img || p.image || '';
-  if (imgSrc) {
-    imgData = imgSrc;
-    const prev = document.getElementById('p-img-preview');
-    prev.src = imgSrc;
-    prev.style.display = 'block';
-    const urlInput = document.getElementById('p-img-url');
-    if (urlInput) urlInput.value = imgSrc;
-  }
+  const allImgs = p.images && p.images.length > 0 ? p.images : (imgSrc ? [imgSrc] : []);
+  ['p-img-url','p-img-url-2','p-img-url-3','p-img-url-4'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el) el.value = allImgs[i] || '';
+  });
+  imgData = allImgs[0] || null;
+  previewExtraImgs();
   // Load colors
   if (p.colors && p.colors.length > 0) {
     productColors = [...p.colors];
