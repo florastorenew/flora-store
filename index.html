@@ -709,8 +709,11 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
             </label>
             <div id="colors-section" style="display:none;margin-top:0.5rem">
               <div style="display:flex;gap:0.4rem;margin-bottom:0.8rem;flex-wrap:wrap" id="color-tags"></div>
+              <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.8rem" id="color-palette">
+                ${[['أحمر','#e74c3c'],['وردي','#e91e8c'],['برتقالي','#e67e22'],['أصفر','#f1c40f'],['أخضر','#27ae60'],['زيتي','#556b2f'],['أزرق','#3498db'],['كحلي','#1a237e'],['سماوي','#87ceeb'],['تركواز','#1abc9c'],['بنفسجي','#9b59b6'],['بني','#795548'],['ذهبي','#c9a96e'],['فضي','#bdc3c7'],['أبيض','#f0f0f0'],['أسود','#2c2c2c'],['رمادي','#95a5a6'],['بيج','#f5ede8'],['كريمي','#fffdd0'],['نيلي','#4169e1']].map(([name,hex]) => `<div onclick="addColorByName('${name}')" title="${name}" style="width:28px;height:28px;border-radius:50%;background:${hex};cursor:pointer;border:2px solid rgba(0,0,0,0.1);transition:transform 0.2s;flex-shrink:0" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'"></div>`).join('')}
+              </div>
               <div style="display:flex;gap:0.5rem">
-                <input id="color-input" placeholder="اكتب لون مثل: أحمر، أزرق..." style="flex:1;padding:0.6rem;border:1.5px solid var(--rose-light);border-radius:10px;font-family:inherit;font-size:0.9rem" onkeydown="if(event.key==='Enter'){event.preventDefault();addColor()}" />
+                <input id="color-input" placeholder="أو اكتب لون مخصص..." style="flex:1;padding:0.6rem;border:1.5px solid var(--rose-light);border-radius:10px;font-family:inherit;font-size:0.9rem" onkeydown="if(event.key==='Enter'){event.preventDefault();addColor()}" />
                 <button type="button" onclick="addColor()" style="background:var(--rose);color:#fff;border:none;border-radius:10px;padding:0.6rem 1rem;cursor:pointer;font-size:0.9rem;font-family:inherit">+ إضافة</button>
               </div>
               <p style="font-size:0.75rem;color:var(--text-light);margin-top:0.5rem">💡 اضغط على اللون لتعليمه كـ "خلص" 🚫</p>
@@ -1339,6 +1342,12 @@ function toggleColorsSection() {
   if (!has) { productColors = []; renderColorTags(); }
 }
 
+function addColorByName(name) {
+  if (productColors.find(c => c.name === name)) { showToast('⚠️ اللون موجود بالفعل'); return; }
+  productColors.push({ name, soldOut: false });
+  renderColorTags();
+}
+
 function addColor() {
   const input = document.getElementById('color-input');
   const name = input.value.trim();
@@ -1353,10 +1362,11 @@ function renderColorTags() {
   const container = document.getElementById('color-tags');
   if (!container) return;
   container.innerHTML = productColors.map((c, i) => `
-    <div style="display:flex;align-items:center;gap:0.3rem;background:${c.soldOut?'#f0f0f0':'var(--rose-pale)'};border:1.5px solid ${c.soldOut?'#ccc':'var(--rose-light)'};border-radius:20px;padding:0.35rem 0.7rem;cursor:pointer;transition:all 0.2s" onclick="toggleColorSoldOut(${i})" title="${c.soldOut?'اضغط لجعله متاح':'اضغط لتعليمه كـ خلص'}">
-      <span style="font-size:0.85rem;${c.soldOut?'text-decoration:line-through;color:#999':''}">${c.name}</span>
-      ${c.soldOut ? '<span style="font-size:0.7rem;color:#e67e22">خلص</span>' : ''}
-      <span onclick="event.stopPropagation();removeColor(${i})" style="margin-right:0.3rem;color:#c0392b;font-size:0.8rem;cursor:pointer">✕</span>
+    <div style="display:flex;align-items:center;gap:0.3rem;background:${c.soldOut?'#f0f0f0':'var(--rose-pale)'};border:1.5px solid ${c.soldOut?'#ccc':'var(--rose-light)'};border-radius:20px;padding:0.25rem 0.6rem;cursor:pointer;transition:all 0.2s" onclick="toggleColorSoldOut(${i})" title="${c.soldOut?'اضغط لجعله متاح':'اضغط لتعليمه كـ خلص'}">
+      <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${getColorHex(c.name)};border:1px solid rgba(0,0,0,0.15);flex-shrink:0"></span>
+      <span style="font-size:0.8rem;${c.soldOut?'text-decoration:line-through;color:#999':''}">${c.name}</span>
+      ${c.soldOut ? '<span style="font-size:0.65rem;color:#e67e22">خلص</span>' : ''}
+      <span onclick="event.stopPropagation();removeColor(${i})" style="color:#c0392b;font-size:0.75rem;cursor:pointer;margin-right:2px">✕</span>
     </div>
   `).join('');
 }
