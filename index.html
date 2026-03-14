@@ -1269,7 +1269,7 @@ function loadSoldOutProducts() {
       ${(p.img||p.image) ? `<img src="${p.img||p.image}" style="width:60px;height:60px;border-radius:10px;object-fit:cover;filter:grayscale(60%)">` : `<div class="admin-product-item-img">${p.emoji||catEmoji[p.category]||'🌸'}</div>`}
       <div class="admin-p-info">
         <div class="admin-p-name">${p.name} <span style="background:#e74c3c;color:#fff;font-size:0.65rem;padding:0.15rem 0.5rem;border-radius:10px">نفذت</span></div>
-        <div class="admin-p-price">${p.price.toLocaleString()} جم · ${catNames[p.category]||p.category}${p.stock !== null && p.stock !== undefined ? ` · 📦 ${p.stock} قطعة` : ''}</div>
+        <div class="admin-p-price">${p.price.toLocaleString()} جم · ${catNames[p.category]||p.category}${p.stock !== null && p.stock !== undefined ? `<span style='background:#e8f5e9;color:#27ae60;font-size:0.65rem;padding:0.1rem 0.4rem;border-radius:8px;margin-right:0.3rem'>📦 ${p.stock}</span>` : ''}</div>
       </div>
       <div class="admin-p-actions">
         <button class="admin-p-btn instock" onclick="restockProduct('${p.id}')">🔄 إعادة إتاحة</button>
@@ -1443,7 +1443,7 @@ function loadAdminProducts() {
       ${(p.img||p.image) ? `<img src="${p.img||p.image}" style="width:60px;height:60px;border-radius:10px;object-fit:cover;${p.outOfStock?'filter:grayscale(60%)':''}">` : `<div class="admin-product-item-img" style="${p.outOfStock?'filter:grayscale(60%)':''}">${p.emoji||catEmoji[p.category]||'🌸'}</div>`}
       <div class="admin-p-info">
         <div class="admin-p-name">${p.name} ${p.outOfStock ? '<span style="background:#e67e22;color:#fff;font-size:0.65rem;padding:0.15rem 0.5rem;border-radius:10px;margin-right:0.3rem">خلص</span>' : ''}</div>
-        <div class="admin-p-price">${p.price.toLocaleString()} جم · ${catNames[p.category]||p.category}${p.stock !== null && p.stock !== undefined ? ` · 📦 ${p.stock} قطعة` : ''}</div>
+        <div class="admin-p-price">${p.price.toLocaleString()} جم · ${catNames[p.category]||p.category}${p.stock !== null && p.stock !== undefined ? `<span style='background:#e8f5e9;color:#27ae60;font-size:0.65rem;padding:0.1rem 0.4rem;border-radius:8px;margin-right:0.3rem'>📦 ${p.stock}</span>` : ''}</div>
       </div>
       <div class="admin-p-actions">
         <button class="admin-p-btn edit" onclick="editProduct('${p.id}')">✏️ تعديل</button>
