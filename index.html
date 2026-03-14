@@ -921,15 +921,14 @@ function renderProducts(list) {
         </div>`}
       </div>
       <div class="product-info" onclick="openModal('${p.id}')">
-        <div class="product-name">${p.name}</div>
+        <div class="product-name">
+          ${p.name}
+          ${p.colors && p.colors.length > 0 ? `<span style="display:inline-flex;gap:3px;margin-right:4px;vertical-align:middle">${p.colors.map(c => `<span title="${c.name}" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${c.soldOut?'#ccc':getColorHex(c.name)};border:1px solid rgba(0,0,0,0.15);opacity:${c.soldOut?0.4:1}"></span>`).join('')}</span>` : ''}
+        </div>
         <div class="product-desc">${p.desc || p.description || 'منتج مميز من فلورا ستور 🌸'}</div>
         <div class="product-footer">
           <div class="product-price">${p.price.toLocaleString()} <span>جنيه</span></div>
-          ${p.colors && p.colors.length > 0 ? `
-            <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin:0.4rem 0">
-              ${p.colors.map(c => `<span style="font-size:0.7rem;padding:0.2rem 0.5rem;border-radius:10px;border:1px solid ${c.soldOut?'#ccc':'var(--rose-light)'};background:${c.soldOut?'#f5f5f5':'var(--rose-pale)'};color:${c.soldOut?'#aaa':'var(--rose-deep)'};${c.soldOut?'text-decoration:line-through':''}">${c.name}${c.soldOut?' ✕':''}</span>`).join('')}
-            </div>
-          ` : ''}
+          
           ${p.outOfStock ? `<span style="font-size:0.75rem;color:#e67e22;font-weight:700">نفذت الكمية</span>` : `<button class="add-cart-btn" onclick="addToCart('${p.id}');event.stopPropagation()"><i class="fas fa-plus"></i></button>`}
         </div>
       </div>
@@ -1303,6 +1302,16 @@ function previewImg(input) {
   };
   reader.readAsDataURL(file);
 }
+function getColorHex(name) {
+  const map = {
+    'أحمر':'#e74c3c','أزرق':'#3498db','أخضر':'#27ae60','أصفر':'#f1c40f','وردي':'#e91e8c',
+    'بنفسجي':'#9b59b6','برتقالي':'#e67e22','بني':'#795548','أبيض':'#f5f5f5','أسود':'#2c2c2c',
+    'رمادي':'#95a5a6','ذهبي':'#c9a96e','فضي':'#bdc3c7','بيج':'#f5ede8','كحلي':'#1a237e',
+    'تركواز':'#1abc9c','زيتي':'#556b2f','سماوي':'#87ceeb','كريمي':'#fffdd0','نيلي':'#4169e1'
+  };
+  return map[name] || '#c97b84';
+}
+
 function previewImgUrl(url) {
   previewExtraImgs();
   imgData = url || null;
