@@ -105,6 +105,12 @@ section { padding:6rem 3rem; position:relative; }
 .cat-card.active { border-color:var(--rose); background:var(--rose-pale); }
 .cat-icon { font-size:2.2rem; margin-bottom:0.8rem; display:block; }
 .cat-name { font-size:0.9rem; font-weight:600; color:var(--text); }
+@media(max-width:768px) {
+  .categories-grid { grid-template-columns:repeat(4,1fr); gap:0.6rem; }
+  .cat-card { padding:0.8rem 0.4rem; border-radius:14px; }
+  .cat-icon { font-size:1.5rem; margin-bottom:0.4rem; }
+  .cat-name { font-size:0.72rem; }
+}
 
 /* PRODUCTS */
 #products { background:var(--cream2); }
