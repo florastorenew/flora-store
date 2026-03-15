@@ -686,7 +686,8 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
           </div>
           <div class="form-group">
             <label>بادج (اختياري)</label>
-            <input type="text" id="p-badge" placeholder="مثال: جديد | أكتر مبيعاً | عرض خاص" />
+            <input type="hidden" id="p-badge" />
+            <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.5rem" id="badge-options"></div>
           </div>
           <div class="form-group">
             <label>رابط صورة المنتج</label>
@@ -1220,6 +1221,7 @@ function closeModalDirect() { document.getElementById('modal-overlay').classList
 const PASS = 'flora2025';
 function openAdmin() {
   sessionStorage.removeItem('flora_admin');
+  setTimeout(renderBadgeOptions, 100);
   document.getElementById('admin-overlay').classList.add('open');
   const ok = sessionStorage.getItem('flora_admin');
   document.getElementById('admin-login-screen').style.display = ok ? 'none' : 'block';
@@ -1250,6 +1252,7 @@ function switchTab(tab, el) {
   el.classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
   if (tab === 'manage') loadAdminProducts();
+  if (tab === 'add') renderBadgeOptions();
   if (tab === 'settings') loadSettings();
   if (tab === 'soldout') loadSoldOutProducts();
 }
@@ -1303,6 +1306,29 @@ function previewImg(input) {
   };
   reader.readAsDataURL(file);
 }
+function selectBadge(val, el) {
+  document.getElementById('p-badge').value = val;
+  document.querySelectorAll('#badge-options button').forEach(b => {
+    b.style.background = '#fff';
+    b.style.color = val === '' && b.textContent.includes('✕') ? '#999' : 'var(--rose-deep)';
+    b.style.borderColor = 'var(--rose-light)';
+  });
+  if (el) {
+    el.style.background = val ? 'var(--rose)' : '#eee';
+    el.style.color = val ? '#fff' : '#666';
+    el.style.borderColor = val ? 'var(--rose)' : '#ccc';
+  }
+}
+
+function renderBadgeOptions() {
+  const container = document.getElementById('badge-options');
+  if (!container) return;
+  const badges = ['جديد','الأكثر مبيعاً','عرض خاص','محدود','مميز','هدية مثالية','جديد وصل','نفذت تقريباً'];
+  const current = document.getElementById('p-badge').value;
+  container.innerHTML = badges.map(b => `<button type="button" onclick="selectBadge('${b}',this)" style="padding:0.35rem 0.8rem;border:1.5px solid ${current===b?'var(--rose)':'var(--rose-light)'};border-radius:20px;background:${current===b?'var(--rose)':'#fff'};cursor:pointer;font-size:0.8rem;color:${current===b?'#fff':'var(--rose-deep)'};font-family:inherit;transition:all 0.2s">${b}</button>`).join('') +
+    `<button type="button" onclick="selectBadge('',this)" style="padding:0.35rem 0.8rem;border:1.5px dashed #ccc;border-radius:20px;background:${!current?'#eee':'#fff'};cursor:pointer;font-size:0.8rem;color:#999;font-family:inherit">✕ بدون بادج</button>`;
+}
+
 function getColorHex(name) {
   const map = {
     'أحمر':'#e74c3c','أزرق':'#3498db','أخضر':'#27ae60','أصفر':'#f1c40f','وردي':'#e91e8c',
@@ -1507,6 +1533,7 @@ function editProduct(id) {
   document.getElementById('p-cat').value = p.category;
   document.getElementById('p-emoji').value = p.emoji || '';
   document.getElementById('p-badge').value = p.badge || '';
+  renderBadgeOptions();
   document.getElementById('p-stock').value = (p.stock !== null && p.stock !== undefined) ? p.stock : '';
   const imgSrc = p.img || p.image || '';
   const allImgs = p.images && p.images.length > 0 ? p.images : (imgSrc ? [imgSrc] : []);
