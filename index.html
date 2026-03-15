@@ -650,6 +650,7 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
           <button class="admin-tab active" onclick="switchTab('add',this)">➕ إضافة منتج</button>
           <button class="admin-tab" onclick="switchTab('manage',this)">📦 إدارة المنتجات</button>
           <button class="admin-tab" onclick="switchTab('soldout',this)">🚫 نفذت الكمية</button>
+          <button class="admin-tab" onclick="switchTab('categories',this)">🗂️ الكاتيجوري</button>
           <button class="admin-tab" onclick="switchTab('settings',this)">⚙️ الإعدادات</button>
         </div>
 
@@ -738,6 +739,20 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
         <!-- SOLD OUT -->
         <div class="admin-section" id="tab-soldout">
           <div id="soldout-products-list"></div>
+        </div>
+
+        <!-- CATEGORIES -->
+        <div class="admin-section" id="tab-categories">
+          <div style="margin-bottom:1.5rem">
+            <div style="font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:1rem">➕ إضافة كاتيجوري جديدة</div>
+            <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap">
+              <input type="text" id="new-cat-emoji" placeholder="الإيموجي 🌸" style="width:90px;padding:0.7rem;border:1.5px solid var(--rose-light);border-radius:10px;font-family:inherit;font-size:1rem;text-align:center" maxlength="4"/>
+              <input type="text" id="new-cat-name" placeholder="اسم الكاتيجوري مثلاً: عطور" style="flex:1;min-width:150px;padding:0.7rem;border:1.5px solid var(--rose-light);border-radius:10px;font-family:inherit;font-size:0.95rem"/>
+              <button onclick="addCategory()" style="padding:0.7rem 1.5rem;background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:#fff;border:none;border-radius:10px;font-family:Tajawal,sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;white-space:nowrap">+ إضافة</button>
+            </div>
+          </div>
+          <div style="font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:1rem">📋 الكاتيجوري الحالية</div>
+          <div id="admin-categories-list"></div>
         </div>
 
         <!-- SETTINGS -->
@@ -848,8 +863,196 @@ let selectedShipping = { type: 'inside', cost: settings.shipInside || 45 };
 let editingId = null;
 let imgData = null;
 
-const catEmoji = { accessories:'💍', watches:'⌚', medals:'🏅', labubu:'🧸', candles:'🕯️', mugs:'☕', mirrors:'🪞', boxes:'🎁' };
-const catNames = { accessories:'إكسسوارات', watches:'ساعات', medals:'ميداليات', labubu:'لبوبو', candles:'شمع', mugs:'مجات', mirrors:'مرايات', boxes:'بوكسات' };
+// ===== CATEGORIES SYSTEM =====
+const defaultCategories = [
+  { id:'accessories', name:'إكسسوارات', emoji:'💍' },
+  { id:'watches',     name:'ساعات',      emoji:'⌚' },
+  { id:'medals',      name:'ميداليات',   emoji:'🏅' },
+  { id:'labubu',      name:'لبوبو',      emoji:'🧸' },
+  { id:'candles',     name:'شمع',        emoji:'🕯️' },
+  { id:'mugs',        name:'مجات',       emoji:'☕' },
+  { id:'mirrors',     name:'مرايات',     emoji:'🪞' },
+  { id:'boxes',       name:'بوكسات',     emoji:'🎁' },
+];
+let customCategories = JSON.parse(localStorage.getItem('flora_categories') || 'null') || defaultCategories;
+
+function saveCategories() {
+  localStorage.setItem('flora_categories', JSON.stringify(customCategories));
+}
+
+function getCatEmoji(id) {
+  const c = customCategories.find(x => x.id === id);
+  return c ? c.emoji : '🌸';
+}
+function getCatName(id) {
+  const c = customCategories.find(x => x.id === id);
+  return c ? c.name : id;
+}
+
+// Build catEmoji/catNames dynamically
+function buildCatMaps() {
+  window.catEmoji = {};
+  window.catNames = {};
+  customCategories.forEach(c => {
+    window.catEmoji[c.id] = c.emoji;
+    window.catNames[c.id] = c.name;
+  });
+}
+buildCatMaps();
+
+function renderCategoriesGrid() {
+  const grid = document.querySelector('.categories-grid');
+  if (!grid) return;
+  grid.innerHTML = `
+    <div class="cat-card active" onclick="filterCategory('all',this)">
+      <span class="cat-icon">🌸</span>
+      <div class="cat-name">الكل</div>
+    </div>
+    ${customCategories.map(c => `
+      <div class="cat-card" onclick="filterCategory('${c.id}',this)">
+        <span class="cat-icon">${c.emoji}</span>
+        <div class="cat-name">${c.name}</div>
+      </div>
+    `).join('')}
+  `;
+  // reactivate current category
+  document.querySelectorAll('.cat-card').forEach(card => {
+    if (card.querySelector('.cat-name') && card.querySelector('.cat-name').textContent.trim() === 'الكل' && currentCategory === 'all') {
+      card.classList.add('active');
+    }
+  });
+}
+
+function renderCategorySelect() {
+  const sel = document.getElementById('p-cat');
+  if (!sel) return;
+  sel.innerHTML = customCategories.map(c => `<option value="${c.id}">${c.emoji} ${c.name}</option>`).join('');
+}
+
+function loadAdminCategories() {
+  const list = document.getElementById('admin-categories-list');
+  if (!list) return;
+  if (!customCategories.length) {
+    list.innerHTML = `<div style="text-align:center;color:var(--text-light);padding:2rem">لا توجد كاتيجوري — أضيفي الأولى!</div>`;
+    return;
+  }
+  list.innerHTML = customCategories.map((c, idx) => `
+    <div style="display:flex;align-items:center;gap:0.8rem;padding:0.8rem 1rem;background:#fff;border:1px solid rgba(201,123,132,0.12);border-radius:14px;margin-bottom:0.6rem">
+      <span style="font-size:1.5rem">${c.emoji}</span>
+      <span style="flex:1;font-weight:600;font-size:0.95rem;color:var(--dark)">${c.name}</span>
+      <span style="font-size:0.75rem;color:var(--text-light);background:var(--rose-pale);padding:0.2rem 0.6rem;border-radius:10px">${products.filter(p=>p.category===c.id).length} منتج</span>
+      <button onclick="deleteCategoryPrompt('${c.id}')" style="background:#fde8e8;color:#c0392b;border:none;border-radius:8px;padding:0.4rem 0.8rem;cursor:pointer;font-size:0.85rem;font-family:inherit">🗑️ حذف</button>
+    </div>
+  `).join('');
+}
+
+function addCategory() {
+  const emoji = document.getElementById('new-cat-emoji').value.trim() || '🌸';
+  const name  = document.getElementById('new-cat-name').value.trim();
+  if (!name) { showToast('⚠️ اكتبي اسم الكاتيجوري'); return; }
+  const id = 'cat_' + Date.now();
+  customCategories.push({ id, name, emoji });
+  saveCategories();
+  buildCatMaps();
+  renderCategoriesGrid();
+  renderCategorySelect();
+  loadAdminCategories();
+  document.getElementById('new-cat-emoji').value = '';
+  document.getElementById('new-cat-name').value = '';
+  showToast(`✅ الكاتيجوري "${name}" اتضافت`);
+}
+
+// Modal for delete with options
+function deleteCategoryPrompt(catId) {
+  const cat = customCategories.find(c => c.id === catId);
+  if (!cat) return;
+  const count = products.filter(p => p.category === catId).length;
+
+  if (count === 0) {
+    // No products — delete directly
+    if (!confirm(`هتحذفي كاتيجوري "${cat.name}"؟`)) return;
+    customCategories = customCategories.filter(c => c.id !== catId);
+    saveCategories();
+    buildCatMaps();
+    renderCategoriesGrid();
+    renderCategorySelect();
+    loadAdminCategories();
+    showToast(`🗑️ كاتيجوري "${cat.name}" اتحذفت`);
+    return;
+  }
+
+  // Has products — show custom modal
+  const otherCats = customCategories.filter(c => c.id !== catId);
+  const otherOptions = otherCats.map(c => `<option value="${c.id}">${c.emoji} ${c.name}</option>`).join('');
+
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.55);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:1.5rem';
+  modal.innerHTML = `
+    <div style="background:#fff;border-radius:24px;padding:2rem;max-width:420px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(201,123,132,0.25)">
+      <div style="font-size:2.5rem;margin-bottom:0.5rem">⚠️</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--dark);margin-bottom:0.5rem">كاتيجوري "${cat.name}"</div>
+      <div style="font-size:0.9rem;color:var(--text-light);margin-bottom:1.5rem">فيها <strong style="color:var(--rose-deep)">${count} منتج</strong> — إيه اللي هتعمليه بيهم؟</div>
+      ${otherCats.length > 0 ? `
+        <div style="background:var(--rose-pale);border-radius:14px;padding:1rem;margin-bottom:1rem;text-align:right">
+          <div style="font-size:0.85rem;font-weight:600;color:var(--dark);margin-bottom:0.5rem">انقلي المنتجات لـ:</div>
+          <select id="transfer-cat-select" style="width:100%;padding:0.6rem;border:1.5px solid var(--rose-light);border-radius:10px;font-family:'Tajawal',sans-serif;font-size:0.9rem;background:#fff;color:var(--text)">
+            ${otherOptions}
+          </select>
+          <button onclick="deleteCategoryAndTransfer('${catId}', document.getElementById('transfer-cat-select').value)" style="width:100%;margin-top:0.7rem;padding:0.7rem;background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:#fff;border:none;border-radius:10px;font-family:'Tajawal',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer">
+            ✅ انقل المنتجات واحذف الكاتيجوري
+          </button>
+        </div>
+      ` : ''}
+      <button onclick="deleteCategoryWithProducts('${catId}')" style="width:100%;padding:0.7rem;background:#fde8e8;color:#c0392b;border:none;border-radius:10px;font-family:'Tajawal',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;margin-bottom:0.6rem">
+        🗑️ احذف الكاتيجوري والمنتجات كلها
+      </button>
+      <button onclick="this.closest('[style*=fixed]').remove()" style="width:100%;padding:0.7rem;background:var(--rose-pale);color:var(--text);border:none;border-radius:10px;font-family:'Tajawal',sans-serif;font-size:0.9rem;cursor:pointer">
+        إلغاء
+      </button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function deleteCategoryAndTransfer(fromId, toId) {
+  document.querySelector('[style*="fixed"][style*="z-index:9999"]')?.remove();
+  if (!toId) { showToast('⚠️ اختاري كاتيجوري للنقل'); return; }
+  const fromCat = customCategories.find(c => c.id === fromId);
+  const toCat   = customCategories.find(c => c.id === toId);
+  // Update products
+  products.forEach(p => { if (p.category === fromId) p.category = toId; });
+  localStorage.setItem('flora_products', JSON.stringify(products));
+  // Remove category
+  customCategories = customCategories.filter(c => c.id !== fromId);
+  saveCategories();
+  buildCatMaps();
+  renderCategoriesGrid();
+  renderCategorySelect();
+  loadAdminCategories();
+  loadAdminProducts();
+  renderProducts(currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory));
+  showToast(`✅ المنتجات اتنقلت لـ "${toCat?.name}" وكاتيجوري "${fromCat?.name}" اتحذفت`);
+}
+
+function deleteCategoryWithProducts(catId) {
+  document.querySelector('[style*="fixed"][style*="z-index:9999"]')?.remove();
+  const cat = customCategories.find(c => c.id === catId);
+  const toDelete = products.filter(p => p.category === catId).map(p => p.id);
+  // Delete from cloud
+  Promise.all(toDelete.map(id => deleteProductFromCloud(id))).then(() => {
+    products = products.filter(p => p.category !== catId);
+    localStorage.setItem('flora_products', JSON.stringify(products));
+    customCategories = customCategories.filter(c => c.id !== catId);
+    saveCategories();
+    buildCatMaps();
+    renderCategoriesGrid();
+    renderCategorySelect();
+    loadAdminCategories();
+    loadAdminProducts();
+    renderProducts(currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory));
+    showToast(`🗑️ كاتيجوري "${cat?.name}" والمنتجات اتحذفت`);
+  });
+}
 
 // ===== INIT =====
 window.addEventListener('load', () => {
@@ -864,9 +1067,8 @@ window.addEventListener('load', () => {
   // show page immediately, load cloud in background
   products = JSON.parse(localStorage.getItem('flora_products') || '[]');
   currentCategory = 'all';
-  // Auto-activate "all" cat card
-  const allCatCard = document.querySelector('.cat-card');
-  if (allCatCard) allCatCard.classList.add('active');
+  renderCategoriesGrid();
+  renderCategorySelect();
   renderProducts(products);
   loadFromCloud();
 });
@@ -1258,9 +1460,10 @@ function switchTab(tab, el) {
   el.classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
   if (tab === 'manage') loadAdminProducts();
-  if (tab === 'add') renderBadgeOptions();
+  if (tab === 'add') { renderBadgeOptions(); renderCategorySelect(); }
   if (tab === 'settings') loadSettings();
   if (tab === 'soldout') loadSoldOutProducts();
+  if (tab === 'categories') loadAdminCategories();
 }
 
 function loadSoldOutProducts() {
