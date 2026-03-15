@@ -58,7 +58,7 @@ nav a:hover::after { width:100%; }
 .cart-count { position:absolute; top:-8px; left:-8px; background:var(--rose); color:#fff; width:18px; height:18px; border-radius:50%; font-size:0.65rem; display:flex; align-items:center; justify-content:center; font-weight:700; }
 .admin-btn { padding:0.4rem 1.2rem; background:transparent; border:1.5px solid var(--rose-light); color:var(--rose); border-radius:30px; font-family:'Tajawal',sans-serif; font-size:0.8rem; cursor:pointer; transition:all 0.3s; letter-spacing:1px; }
 .admin-btn:hover { background:var(--rose); color:#fff; border-color:var(--rose); }
-.hamburger { display:none; background:none; border:none; cursor:pointer; font-size:1.3rem; color:var(--text); }
+.hamburger { display:none !important; background:none; border:none; cursor:pointer; font-size:1.3rem; color:var(--text); }
 
 /* HERO */
 .hero { min-height:100vh; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; padding-top:75px; }
@@ -283,7 +283,7 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
   nav { display:none; }
   nav.open { display:flex; flex-direction:column; position:fixed; inset:0; top:75px; background:rgba(253,246,240,0.98); padding:2rem; z-index:999; align-items:center; justify-content:center; gap:2rem; }
   nav.open a { font-size:1.2rem; }
-  .hamburger { display:block; }
+  .hamburger { display:none !important; }
   section { padding:4rem 1.2rem; }
   .products-grid { grid-template-columns:repeat(2,1fr); gap:0.8rem; }
   .social-links { flex-direction:column; align-items:stretch; }
