@@ -281,8 +281,9 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
 @media(max-width:768px){
   header { padding:0 1.2rem; }
   nav { display:none; }
-  nav.open { display:flex; flex-direction:column; position:fixed; top:0; right:0; bottom:0; width:75%; max-width:300px; background:#fff; padding:5rem 2rem 2rem; z-index:999; align-items:flex-start; justify-content:flex-start; gap:0.5rem; box-shadow:-5px 0 30px rgba(0,0,0,0.15); border-radius:20px 0 0 20px; }
-  nav.open a { font-size:1.1rem; width:100%; padding:0.8rem 1rem; border-radius:12px; border-bottom:1px solid var(--rose-pale); }
+  nav.open { display:flex; flex-direction:column; position:fixed; top:0; right:0; bottom:0; width:80%; max-width:280px; background:#fff; padding:4rem 1.5rem 2rem; z-index:1000; align-items:flex-start; justify-content:flex-start; gap:0; box-shadow:-8px 0 40px rgba(0,0,0,0.2); overflow-y:auto; }
+  nav.open a { font-size:1rem; width:100%; padding:0.9rem 1rem; border-radius:12px; border-bottom:1px solid var(--rose-pale); display:flex; align-items:center; color:var(--text); text-decoration:none; }
+  nav.open a:last-child { border-bottom:none; }
   nav.open a:hover { background:var(--rose-pale); }
   .hamburger { display:block; }
   section { padding:4rem 1.2rem; }
@@ -902,7 +903,7 @@ function toggleNav() {
     if (!overlay) {
       overlay = document.createElement('div');
       overlay.id = 'nav-overlay';
-      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:998;';
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;';
       overlay.onclick = toggleNav;
       document.body.appendChild(overlay);
     }
