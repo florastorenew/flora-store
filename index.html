@@ -73,8 +73,8 @@ nav a:hover::after { width:100%; }
 /* HERO */
 .hero { min-height:100vh; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; padding-top:75px; }
 .hero-bg { position:absolute; inset:0; background: radial-gradient(ellipse 80% 80% at 20% 50%,rgba(253,246,240,0.6) 0%,transparent 70%); }
-.hero-petals { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
-.petal { position:absolute; opacity:0.15; animation:floatPetal linear infinite; }
+.hero-petals { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+.petal { position:fixed; opacity:0.18; animation:floatPetal linear infinite; z-index:0; }
 @keyframes floatPetal { 0%{transform:translateY(100vh) rotate(0deg);opacity:0} 10%{opacity:0.15} 90%{opacity:0.08} 100%{transform:translateY(-20vh) rotate(360deg);opacity:0} }
 .hero-content { text-align:center; z-index:1; padding:2rem; animation:heroIn 1s ease forwards; }
 @keyframes heroIn { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
@@ -576,10 +576,11 @@ nav a:hover { color: var(--rose-light) !important; }
   </div>
 </header>
 
+  <div class="hero-petals" id="petals"></div>
+
 <!-- HERO -->
 <section class="hero" id="home">
   <div class="hero-bg"></div>
-  <div class="hero-petals" id="petals"></div>
   <div class="hero-content">
     <div class="hero-badge">✦ كوليكشن جديد ✦</div>
     <h1>اكتشفي<em>Flora</em></h1>
@@ -1138,12 +1139,12 @@ window.addEventListener('load', () => {
 // ===== PETALS =====
 function createPetals() {
   const c = document.getElementById('petals');
-  ['🌸','🌺','✿','❀','🌷','·','✦'].forEach((sym, idx) => {
-    for (let i = 0; i < 3; i++) {
+  ['🌸','🌺','✿','❀','🌷','🌸','✦','🌸','❀','🌺'].forEach((sym, idx) => {
+    for (let i = 0; i < 5; i++) {
       const p = document.createElement('div');
       p.className = 'petal';
       p.textContent = sym;
-      p.style.cssText = `left:${Math.random()*100}%;font-size:${0.7+Math.random()*1.3}rem;animation-duration:${9+Math.random()*14}s;animation-delay:${Math.random()*12}s;`;
+      p.style.cssText = `left:${Math.random()*100}%;font-size:${0.6+Math.random()*1.6}rem;animation-duration:${10+Math.random()*18}s;animation-delay:${Math.random()*18}s;`;
       c.appendChild(p);
     }
   });
