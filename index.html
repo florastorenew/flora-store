@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+د<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -162,6 +162,56 @@ section { padding:6rem 3rem; position:relative; }
 .social-card.whatsapp { background:#25d366; color:#fff; }
 .social-card:hover { transform:translateY(-5px); box-shadow:0 15px 35px rgba(0,0,0,0.15); }
 .social-card i { font-size:1.4rem; }
+
+/* FLOATING WHATSAPP */
+.float-wa { position:fixed; bottom:2rem; left:2rem; z-index:1500; width:56px; height:56px; background:linear-gradient(135deg,#25d366,#128c7e); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.5rem; box-shadow:0 6px 25px rgba(37,211,102,0.45); cursor:pointer; text-decoration:none; transition:all 0.3s; animation:waPulse 2.5s ease infinite; }
+.float-wa:hover { transform:scale(1.12); box-shadow:0 10px 35px rgba(37,211,102,0.6); animation:none; }
+@keyframes waPulse { 0%,100%{box-shadow:0 6px 25px rgba(37,211,102,0.45)} 50%{box-shadow:0 6px 35px rgba(37,211,102,0.7),0 0 0 8px rgba(37,211,102,0.1)} }
+
+/* BACK TO TOP */
+.back-top { position:fixed; bottom:2rem; right:2rem; z-index:1500; width:44px; height:44px; background:linear-gradient(135deg,var(--rose),var(--rose-deep)); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:1rem; box-shadow:0 4px 18px rgba(201,123,132,0.4); cursor:pointer; border:none; opacity:0; pointer-events:none; transition:all 0.3s; transform:translateY(10px); }
+.back-top.show { opacity:1; pointer-events:all; transform:translateY(0); }
+.back-top:hover { transform:translateY(-3px); box-shadow:0 8px 25px rgba(201,123,132,0.5); }
+
+/* SKELETON */
+.skeleton { background:linear-gradient(90deg,var(--rose-pale) 25%,rgba(247,232,234,0.5) 50%,var(--rose-pale) 75%); background-size:200% 100%; animation:shimmer 1.5s infinite; border-radius:12px; }
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.skeleton-card { background:#fff; border-radius:20px; overflow:hidden; border:1px solid rgba(201,123,132,0.08); }
+.skeleton-img { aspect-ratio:1/1; }
+.skeleton-info { padding:0.7rem; display:flex; flex-direction:column; gap:0.5rem; }
+.skeleton-line { height:14px; border-radius:6px; }
+.skeleton-line.short { width:60%; }
+
+/* ABOUT SECTION */
+.about-section { background:linear-gradient(135deg,var(--dark) 0%,#3d1a20 100%); color:#fff; }
+.about-inner { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; max-width:1000px; margin:0 auto; }
+.about-text .section-tag { color:var(--gold); }
+.about-text .section-title { color:#fff; }
+.about-text .section-title em { color:var(--rose-light); }
+.about-desc { color:rgba(255,255,255,0.7); line-height:2; font-size:0.95rem; margin-top:1.5rem; }
+.about-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:2.5rem; }
+.stat-item { text-align:center; padding:1rem; background:rgba(255,255,255,0.06); border-radius:16px; border:1px solid rgba(255,255,255,0.08); }
+.stat-num { font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:700; color:var(--rose-light); display:block; }
+.stat-label { font-size:0.7rem; color:rgba(255,255,255,0.5); letter-spacing:2px; text-transform:uppercase; margin-top:0.3rem; display:block; }
+.about-features { display:flex; flex-direction:column; gap:1rem; }
+.feat-item { display:flex; align-items:center; gap:1rem; padding:1rem 1.2rem; background:rgba(255,255,255,0.05); border-radius:16px; border:1px solid rgba(255,255,255,0.08); transition:all 0.3s; }
+.feat-item:hover { background:rgba(201,123,132,0.15); border-color:rgba(201,123,132,0.3); transform:translateX(-5px); }
+.feat-icon { width:42px; height:42px; min-width:42px; background:linear-gradient(135deg,var(--rose),var(--rose-deep)); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+.feat-text h4 { font-size:0.9rem; font-weight:700; color:#fff; margin-bottom:0.2rem; }
+.feat-text p { font-size:0.78rem; color:rgba(255,255,255,0.5); }
+
+/* SCROLL REVEAL */
+.reveal { opacity:0; transform:translateY(30px); transition:opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* CAT COUNT BADGE */
+.cat-count { font-size:0.65rem; background:var(--rose); color:#fff; border-radius:10px; padding:0.1rem 0.4rem; margin-top:0.25rem; display:inline-block; font-weight:700; }
+
+@media(max-width:768px) {
+  .about-inner { grid-template-columns:1fr; gap:2rem; }
+  .float-wa { bottom:1.5rem; left:1rem; width:50px; height:50px; font-size:1.3rem; }
+  .back-top { bottom:1.5rem; right:1rem; }
+}
 
 /* FOOTER */
 footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 2rem; text-align:center; }
@@ -344,6 +394,7 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
   <nav id="nav">
     <a href="#home" onclick="closeNav()">الرئيسية</a>
     <a href="#products" onclick="closeNav()">المنتجات</a>
+    <a href="#about" onclick="closeNav()">عن فلورا</a>
     <a href="#shipping" onclick="closeNav()">الشحن</a>
     <a href="#social" onclick="closeNav()">تواصلي معنا</a>
   </nav>
@@ -388,7 +439,7 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
 </div>
 
 <!-- CATEGORIES -->
-<section id="categories">
+<section id="categories" class="reveal">
   <div class="section-header">
     <span class="section-tag">✦ تصفح حسب الفئة</span>
     <h2 class="section-title">اختاري <em>كاتيجوري</em></h2>
@@ -435,7 +486,7 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
 </section>
 
 <!-- PRODUCTS -->
-<section id="products">
+<section id="products" class="reveal">
   <div class="section-header">
     <span class="section-tag">✦ كوليكشننا</span>
     <h2 class="section-title">المنتجات <em>المميزة</em></h2>
@@ -453,7 +504,7 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
 </section>
 
 <!-- SHIPPING -->
-<section id="shipping" class="shipping-section">
+<section id="shipping" class="shipping-section reveal">
   <div class="section-header">
     <span class="section-tag">✦ التوصيل</span>
     <h2 class="section-title">مصاريف <em>الشحن</em></h2>
@@ -474,7 +525,7 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
 </section>
 
 <!-- SOCIAL -->
-<section id="social" class="social-section">
+<section id="social" class="social-section reveal">
   <div class="section-header">
     <span class="section-tag">✦ تابعينا</span>
     <h2 class="section-title">تواصلي <em>معنا</em></h2>
@@ -496,6 +547,72 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
     </a>
   </div>
 </section>
+
+<!-- ABOUT -->
+<section id="about" class="about-section reveal">
+  <div class="about-inner">
+    <div class="about-text">
+      <span class="section-tag">✦ قصتنا</span>
+      <h2 class="section-title">عن <em>فلورا ستور</em></h2>
+      <div class="section-line" style="margin:1.2rem 0 0"></div>
+      <p class="about-desc">فلورا ستور بدأت من حب حقيقي للتفاصيل الجميلة 🌸<br>بنؤمن إن كل بنت تستاهل إكسسوار يعكس روحها وأناقتها — من ميداليات繊 وساعات أنيقة لبوكسات هدايا مصممة بحب.</p>
+      <div class="about-stats">
+        <div class="stat-item">
+          <span class="stat-num" id="stat-products">0</span>
+          <span class="stat-label">منتج مميز</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">100%</span>
+          <span class="stat-label">جودة مضمونة</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">🌸</span>
+          <span class="stat-label">تغليف هدايا</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-features">
+      <div class="feat-item">
+        <div class="feat-icon">🚚</div>
+        <div class="feat-text">
+          <h4>توصيل لكل مصر</h4>
+          <p>توصيل سريع لجميع المحافظات في 2–7 أيام</p>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon">✨</div>
+        <div class="feat-text">
+          <h4>منتجات مختارة بعناية</h4>
+          <p>كل قطعة بتتاختار بحب وتدقيق عشانك</p>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon">🎀</div>
+        <div class="feat-text">
+          <h4>تغليف هدايا مجاني</h4>
+          <p>كل أوردر بيوصلك في كيس هدية أنيق</p>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon">💬</div>
+        <div class="feat-text">
+          <h4>خدمة عملاء على واتساب</h4>
+          <p>هنا دايماً نرد عليكي بسرعة 🌸</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/201147106979" target="_blank" class="float-wa" title="تواصلي معنا على واتساب">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- BACK TO TOP -->
+<button class="back-top" id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="رجوع للأعلى">
+  <i class="fas fa-chevron-up"></i>
+</button>
 
 <!-- FOOTER -->
 <footer>
@@ -804,6 +921,7 @@ async function loadFromCloud() {
     console.error('Cloud load error:', e);
     products = JSON.parse(localStorage.getItem('flora_products') || '[]');
     renderProducts(products);
+    updateCatCounts();
   }
 }
 
@@ -866,12 +984,13 @@ window.addEventListener('load', () => {
   currentCategory = 'all';
   const allCatCard = document.querySelector('.cat-card');
   if (allCatCard) allCatCard.classList.add('active');
-  renderProducts(products);
+  showSkeleton();
+  setTimeout(() => {
+    renderProducts(products);
+    updateCatCounts();
+  }, 600);
   loadFromCloud();
-});
-
-window.addEventListener('scroll', () => {
-  document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+  initReveal();
 });
 
 // ===== PETALS =====
@@ -909,6 +1028,60 @@ function showToast(msg) {
 }
 
 // ===== PRODUCTS =====
+// ===== SKELETON LOADING =====
+function showSkeleton() {
+  const grid = document.getElementById('products-grid');
+  grid.innerHTML = Array(6).fill(`
+    <div class="skeleton-card">
+      <div class="skeleton skeleton-img"></div>
+      <div class="skeleton-info">
+        <div class="skeleton skeleton-line"></div>
+        <div class="skeleton skeleton-line short"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== CAT COUNT =====
+function updateCatCounts() {
+  const list = currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory);
+  document.getElementById('filter-count').textContent = list.length ? `عرض ${list.length} منتج` : '';
+  // update cat card counts
+  document.querySelectorAll('.cat-card').forEach(card => {
+    const nameEl = card.querySelector('.cat-name');
+    if (!nameEl) return;
+    const existing = card.querySelector('.cat-count');
+    if (existing) existing.remove();
+    const catId = card.getAttribute('onclick')?.match(/filterCategory\('([^']+)'/)?.[1];
+    if (!catId || catId === 'all') return;
+    const count = products.filter(p => p.category === catId).length;
+    if (count > 0) {
+      const badge = document.createElement('span');
+      badge.className = 'cat-count';
+      badge.textContent = count;
+      nameEl.after(badge);
+    }
+  });
+  // update stat
+  const statEl = document.getElementById('stat-products');
+  if (statEl) statEl.textContent = products.length;
+}
+
+// ===== SCROLL REVEAL =====
+function initReveal() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+}
+
+// ===== BACK TO TOP =====
+window.addEventListener('scroll', () => {
+  document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+  const btn = document.getElementById('back-top');
+  if (btn) btn.classList.toggle('show', window.scrollY > 400);
+});
+
 function renderProducts(list) {
   const grid = document.getElementById('products-grid');
   document.getElementById('filter-count').textContent = list.length ? `عرض ${list.length} منتج` : '';
