@@ -26,7 +26,7 @@
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior: smooth; }
-body { font-family: 'Tajawal', sans-serif; background: linear-gradient(to bottom,
+body { font-family: 'Cormorant Garamond', 'Tajawal', sans-serif; background: linear-gradient(to bottom,
   #2a1a1e 0%,
   #3d1a20 12%,
   #6b2535 25%,
@@ -519,6 +519,30 @@ nav a:hover { color: var(--rose-light) !important; }
 #admin-pass { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.2) !important; color: #fff !important; }
 #admin-pass::placeholder { color: rgba(255,255,255,0.35) !important; }
 .admin-login button { background: linear-gradient(135deg, var(--rose), var(--rose-deep)) !important; }
+
+
+/* ===== CORMORANT GARAMOND FOR ALL ENGLISH TEXT ===== */
+:lang(en), [lang="en"],
+.logo-name, .logo-sub,
+nav a, .hero-badge,
+.section-tag, .btn-primary, .btn-secondary,
+.hero-scroll, .filter-sort, .filter-count,
+.product-badge, .admin-btn,
+.footer-tagline, .footer-links a, .footer-bottom,
+.feat-text h4, .feat-text p,
+.stat-label {
+  font-family: 'Cormorant Garamond', serif !important;
+}
+
+/* Apply to any element containing only latin characters via universal selector override */
+* { font-family: 'Tajawal', sans-serif; }
+*:not([lang="ar"]) h1, *:not([lang="ar"]) h2, *:not([lang="ar"]) h3 {
+  font-family: 'Cormorant Garamond', serif;
+}
+.section-tag { font-family: 'Cormorant Garamond', serif !important; letter-spacing: 4px; }
+.footer-tagline { font-family: 'Cormorant Garamond', serif !important; }
+.logo-sub { font-family: 'Cormorant Garamond', serif !important; }
+.hero-badge { font-family: 'Cormorant Garamond', serif !important; }
 
 </style>
 </head>
