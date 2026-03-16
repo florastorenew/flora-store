@@ -80,7 +80,7 @@ nav a:hover::after { width:100%; }
 @keyframes heroIn { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
 .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; padding:0.4rem 1.2rem; border:1px solid var(--rose-light); border-radius:30px; font-size:0.75rem; letter-spacing:3px; color:var(--rose); text-transform:uppercase; margin-bottom:1.5rem; background:rgba(255,255,255,0.6); }
 .hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(3.5rem,9vw,7.5rem); font-weight:300; line-height:1.05; color:var(--dark); margin-bottom:0.3rem; }
-.hero h1 em { font-style:italic; color:var(--rose); display:block; }
+.hero h1 em { font-style:italic; color:var(--rose); display:inline; }
 .hero-desc { font-size:1rem; color:var(--text-light); max-width:420px; margin:1.2rem auto 2.5rem; line-height:1.8; font-weight:300; }
 .hero-actions { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
 .btn-primary { padding:0.9rem 2.5rem; background:linear-gradient(135deg,var(--rose),var(--rose-deep)); color:#fff; border:none; border-radius:50px; font-family:'Tajawal',sans-serif; font-size:0.95rem; font-weight:600; cursor:pointer; letter-spacing:1px; box-shadow:0 8px 25px rgba(201,123,132,0.35); transition:all 0.3s; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; }
@@ -585,7 +585,7 @@ nav a:hover { color: var(--rose-light) !important; }
   <div class="hero-bg"></div>
   <div class="hero-content">
     <div class="hero-badge">✦ كوليكشن جديد ✦</div>
-    <h1>اكتشفي<em>Flora</em></h1>
+    <h1>اكتشفي <em>Flora</em></h1>
     <p class="hero-desc">كل إكسسوار، كل تفصيلة، كل هدية — مصممة خصيصاً لتعكس أناقتك وروحك الرقيقة 🌸</p>
     <div class="hero-actions">
       <a href="#products" class="btn-primary"><i class="fas fa-star"></i> تسوقي الآن</a>
