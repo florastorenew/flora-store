@@ -153,14 +153,24 @@ section { padding:6rem 3rem; position:relative; }
 .shipping-card p { font-size:0.78rem; color:var(--text-light); line-height:1.6; }
 
 /* SOCIAL */
-.social-section { background:#fff; }
+.social-section { background:linear-gradient(135deg,var(--dark) 0%,#3d1a20 100%); padding-top:0 !important; }
+.social-divider { width:80%; max-width:600px; height:1px; background:rgba(255,255,255,0.08); margin:0 auto 4rem; }
+.social-section .section-tag { color:var(--gold); }
+.social-section .section-title { color:#fff; }
+.social-section .section-title em { color:var(--rose-light); }
+.social-section p { color:rgba(255,255,255,0.5) !important; }
+.social-section .section-line { background:linear-gradient(90deg,transparent,var(--rose-light),transparent); }
 .social-links { display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap; max-width:700px; margin:0 auto; }
 .social-card { display:flex; align-items:center; gap:1rem; padding:1.2rem 2rem; border-radius:16px; text-decoration:none; font-weight:600; font-size:0.95rem; transition:all 0.3s; min-width:190px; justify-content:center; }
-.social-card.tiktok { background:#000; color:#fff; }
-.social-card.facebook { background:#1877f2; color:#fff; }
-.social-card.instagram { background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color:#fff; }
-.social-card.whatsapp { background:#25d366; color:#fff; }
-.social-card:hover { transform:translateY(-5px); box-shadow:0 15px 35px rgba(0,0,0,0.15); }
+.social-card.tiktok { background:rgba(255,255,255,0.08); color:#fff; border:1px solid rgba(255,255,255,0.12); }
+.social-card.tiktok:hover { background:#000; border-color:#000; }
+.social-card.facebook { background:rgba(255,255,255,0.08); color:#fff; border:1px solid rgba(255,255,255,0.12); }
+.social-card.facebook:hover { background:#1877f2; border-color:#1877f2; }
+.social-card.instagram { background:rgba(255,255,255,0.08); color:#fff; border:1px solid rgba(255,255,255,0.12); }
+.social-card.instagram:hover { background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); border-color:transparent; }
+.social-card.whatsapp { background:rgba(255,255,255,0.08); color:#fff; border:1px solid rgba(255,255,255,0.12); }
+.social-card.whatsapp:hover { background:#25d366; border-color:#25d366; }
+.social-card:hover { transform:translateY(-5px); box-shadow:0 15px 35px rgba(0,0,0,0.3); }
 .social-card i { font-size:1.4rem; }
 
 /* FLOATING WHATSAPP */
@@ -502,8 +512,10 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
   <div class="products-grid" id="products-grid"></div>
 </section>
 
-<!-- ABOUT -->
-<section id="about" class="about-section reveal">
+<!-- ABOUT + SOCIAL merged -->
+<div style="background:linear-gradient(135deg,var(--dark) 0%,#3d1a20 100%)">
+
+<section id="about" class="about-section reveal" style="background:transparent">
   <div class="about-inner">
     <div class="about-text">
       <span class="section-tag">✦ قصتنا</span>
@@ -558,13 +570,15 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
   </div>
 </section>
 
+<div class="social-divider"></div>
+
 <!-- SOCIAL -->
-<section id="social" class="social-section reveal">
+<section id="social" class="social-section reveal" style="background:transparent">
   <div class="section-header">
     <span class="section-tag">✦ تابعينا</span>
     <h2 class="section-title">تواصلي <em>معنا</em></h2>
     <div class="section-line"></div>
-    <p style="color:var(--text-light);margin-top:1rem;font-size:0.9rem">تابعينا على السوشيال ميديا وابقي على اطلاع بأحدث الكوليكشنز 🌸</p>
+    <p style="color:rgba(255,255,255,0.5);margin-top:1rem;font-size:0.9rem">تابعينا على السوشيال ميديا وابقي على اطلاع بأحدث الكوليكشنز 🌸</p>
   </div>
   <div class="social-links">
     <a href="https://www.tiktok.com/@florastore04" target="_blank" class="social-card tiktok">
@@ -581,6 +595,8 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
     </a>
   </div>
 </section>
+
+</div>
 
 <!-- FLOATING WHATSAPP -->
 <a href="https://wa.me/201147106979" target="_blank" class="float-wa" title="تواصلي معنا على واتساب">
