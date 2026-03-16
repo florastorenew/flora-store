@@ -90,6 +90,8 @@ nav a:hover::after { width:100%; }
 
 /* SECTIONS */
 section { padding:6rem 3rem; position:relative; }
+#categories { background: linear-gradient(to bottom, var(--cream) 0%, var(--cream2) 100%); }
+#products { background: linear-gradient(to bottom, var(--cream2) 0%, var(--nude) 60%, #e8d5c4 100%); }
 .section-header { text-align:center; margin-bottom:4rem; }
 .section-tag { font-size:0.7rem; letter-spacing:4px; color:var(--gold); text-transform:uppercase; font-weight:600; margin-bottom:0.8rem; display:block; }
 .section-title { font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:400; color:var(--dark); line-height:1.15; }
@@ -113,7 +115,7 @@ section { padding:6rem 3rem; position:relative; }
 }
 
 /* PRODUCTS */
-#products { background:var(--cream2); }
+#products { background:transparent; }
 .products-filter { display:flex; align-items:center; justify-content:space-between; margin-bottom:2.5rem; flex-wrap:wrap; gap:1rem; }
 .filter-count { font-size:0.85rem; color:var(--text-light); }
 .filter-sort { padding:0.5rem 1rem; border:1px solid var(--rose-light); border-radius:20px; background:#fff; color:var(--text); font-family:'Tajawal',sans-serif; font-size:0.85rem; cursor:pointer; outline:none; }
@@ -153,7 +155,7 @@ section { padding:6rem 3rem; position:relative; }
 .shipping-card p { font-size:0.78rem; color:var(--text-light); line-height:1.6; }
 
 /* SOCIAL */
-.social-section { background:linear-gradient(135deg,var(--dark) 0%,#3d1a20 100%); padding-top:0 !important; }
+.social-section { background:transparent; padding-top:0 !important; }
 .social-divider { width:80%; max-width:600px; height:1px; background:rgba(255,255,255,0.08); margin:0 auto 4rem; }
 .social-section .section-tag { color:var(--gold); }
 .social-section .section-title { color:#fff; }
@@ -193,7 +195,7 @@ section { padding:6rem 3rem; position:relative; }
 .skeleton-line.short { width:60%; }
 
 /* ABOUT SECTION */
-.about-section { background:linear-gradient(135deg,var(--dark) 0%,#3d1a20 100%); color:#fff; }
+.about-section { background:transparent; color:#fff; }
 .about-inner { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; max-width:1000px; margin:0 auto; }
 .about-text .section-tag { color:var(--gold); }
 .about-text .section-title { color:#fff; }
@@ -224,7 +226,7 @@ section { padding:6rem 3rem; position:relative; }
 }
 
 /* FOOTER */
-footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 2rem; text-align:center; }
+footer { background:linear-gradient(to bottom, #3d1a20, var(--dark)); color:rgba(255,255,255,0.7); padding:4rem 3rem 2rem; text-align:center; }
 .footer-logo { font-family:'Cormorant Garamond',serif; font-size:2.5rem; font-style:italic; color:var(--rose-light); letter-spacing:5px; margin-bottom:0.5rem; }
 .footer-tagline { font-size:0.8rem; letter-spacing:3px; color:var(--gold); margin-bottom:2rem; }
 .footer-links { display:flex; gap:2rem; justify-content:center; flex-wrap:wrap; margin-bottom:2rem; }
@@ -513,7 +515,7 @@ footer { background:var(--dark); color:rgba(255,255,255,0.7); padding:4rem 3rem 
 </section>
 
 <!-- ABOUT + SOCIAL merged -->
-<div style="background:linear-gradient(135deg,var(--dark) 0%,#3d1a20 100%)">
+<div style="background:linear-gradient(to bottom, #e8d0c8 0%, #c4908a 8%, #7a3040 20%, var(--dark) 40%, #3d1a20 100%)">
 
 <section id="about" class="about-section reveal" style="background:transparent">
   <div class="about-inner">
