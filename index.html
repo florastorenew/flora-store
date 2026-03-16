@@ -27,14 +27,14 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior: smooth; }
 body { font-family: 'Tajawal', sans-serif; background: linear-gradient(to bottom,
-  #fdf6f0 0%,
-  #f7e8ea 15%,
-  #f0d9d1 28%,
-  #e8b4bb 40%,
-  #c97b84 52%,
-  #a85c66 62%,
-  #7a3040 72%,
-  #3d1a20 82%,
+  #2a1a1e 0%,
+  #3d1a20 10%,
+  #7a3040 22%,
+  #a85c66 35%,
+  #c97b84 48%,
+  #e8b4bb 60%,
+  #f0d9d1 72%,
+  #f7e8ea 85%,
   #2a1a1e 100%
 ) fixed; color: var(--text); overflow-x: hidden; }
 ::-webkit-scrollbar { width: 6px; }
@@ -432,11 +432,14 @@ footer { background: transparent; color: rgba(255,255,255,0.7); }
 .section-tag { color: var(--gold) !important; }
 .section-line { background: linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent) !important; }
 
-/* Hero text stays readable */
-.hero h1 { color: var(--dark) !important; text-shadow: 0 2px 20px rgba(253,246,240,0.8); }
-.hero h1 em { color: var(--rose-deep) !important; }
-.hero-desc { color: var(--text) !important; }
-.hero-badge { background: rgba(255,255,255,0.7) !important; }
+/* Hero text white on dark top */
+.hero h1 { color: #fff !important; text-shadow: 0 2px 30px rgba(0,0,0,0.3); }
+.hero h1 em { color: var(--rose-light) !important; }
+.hero-desc { color: rgba(255,255,255,0.75) !important; }
+.hero-badge { background: rgba(255,255,255,0.12) !important; border-color: rgba(255,255,255,0.3) !important; color: #fff !important; }
+.btn-secondary { border-color: rgba(255,255,255,0.35) !important; color: #fff !important; }
+.btn-secondary:hover { border-color: var(--rose-light) !important; color: var(--rose-light) !important; }
+.hero-scroll { color: rgba(255,255,255,0.6) !important; }
 
 /* Empty state */
 .empty-state p { color: rgba(255,255,255,0.7) !important; }
