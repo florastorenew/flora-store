@@ -26,7 +26,17 @@
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior: smooth; }
-body { font-family: 'Tajawal', sans-serif; background: var(--cream); color: var(--text); overflow-x: hidden; }
+body { font-family: 'Tajawal', sans-serif; background: linear-gradient(to bottom,
+  #fdf6f0 0%,
+  #f7e8ea 15%,
+  #f0d9d1 28%,
+  #e8b4bb 40%,
+  #c97b84 52%,
+  #a85c66 62%,
+  #7a3040 72%,
+  #3d1a20 82%,
+  #2a1a1e 100%
+) fixed; color: var(--text); overflow-x: hidden; }
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--cream); }
 ::-webkit-scrollbar-thumb { background: var(--rose-light); border-radius: 10px; }
@@ -62,7 +72,7 @@ nav a:hover::after { width:100%; }
 
 /* HERO */
 .hero { min-height:100vh; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; padding-top:75px; }
-.hero-bg { position:absolute; inset:0; background:radial-gradient(ellipse 80% 80% at 20% 50%,rgba(247,232,234,0.8) 0%,transparent 60%),radial-gradient(ellipse 60% 60% at 80% 20%,rgba(232,212,176,0.3) 0%,transparent 50%),radial-gradient(ellipse 50% 50% at 60% 80%,rgba(240,217,209,0.4) 0%,transparent 50%),var(--cream); }
+.hero-bg { position:absolute; inset:0; background: radial-gradient(ellipse 80% 80% at 20% 50%,rgba(253,246,240,0.6) 0%,transparent 70%); }
 .hero-petals { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
 .petal { position:absolute; opacity:0.15; animation:floatPetal linear infinite; }
 @keyframes floatPetal { 0%{transform:translateY(100vh) rotate(0deg);opacity:0} 10%{opacity:0.15} 90%{opacity:0.08} 100%{transform:translateY(-20vh) rotate(360deg);opacity:0} }
@@ -89,9 +99,9 @@ nav a:hover::after { width:100%; }
 @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
 /* SECTIONS */
-section { padding:6rem 3rem; position:relative; }
-#categories { background: linear-gradient(to bottom, var(--cream) 0%, var(--cream2) 100%); }
-#products { background: linear-gradient(to bottom, var(--cream2) 0%, var(--nude) 60%, #e8d5c4 100%); }
+section { padding:6rem 3rem; position:relative; background:transparent; }
+
+
 .section-header { text-align:center; margin-bottom:4rem; }
 .section-tag { font-size:0.7rem; letter-spacing:4px; color:var(--gold); text-transform:uppercase; font-weight:600; margin-bottom:0.8rem; display:block; }
 .section-title { font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:400; color:var(--dark); line-height:1.15; }
@@ -115,7 +125,7 @@ section { padding:6rem 3rem; position:relative; }
 }
 
 /* PRODUCTS */
-#products { background:transparent; }
+
 .products-filter { display:flex; align-items:center; justify-content:space-between; margin-bottom:2.5rem; flex-wrap:wrap; gap:1rem; }
 .filter-count { font-size:0.85rem; color:var(--text-light); }
 .filter-sort { padding:0.5rem 1rem; border:1px solid var(--rose-light); border-radius:20px; background:#fff; color:var(--text); font-family:'Tajawal',sans-serif; font-size:0.85rem; cursor:pointer; outline:none; }
@@ -195,7 +205,7 @@ section { padding:6rem 3rem; position:relative; }
 .skeleton-line.short { width:60%; }
 
 /* ABOUT SECTION */
-.about-section { background:transparent; color:#fff; }
+.about-section { background:transparent; color:inherit; }
 .about-inner { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; max-width:1000px; margin:0 auto; }
 .about-text .section-tag { color:var(--gold); }
 .about-text .section-title { color:#fff; }
@@ -226,7 +236,7 @@ section { padding:6rem 3rem; position:relative; }
 }
 
 /* FOOTER */
-footer { background:linear-gradient(to bottom, #3d1a20, var(--dark)); color:rgba(255,255,255,0.7); padding:4rem 3rem 2rem; text-align:center; }
+footer { background:transparent; color:rgba(255,255,255,0.7); padding:4rem 3rem 2rem; text-align:center; }
 .footer-logo { font-family:'Cormorant Garamond',serif; font-size:2.5rem; font-style:italic; color:var(--rose-light); letter-spacing:5px; margin-bottom:0.5rem; }
 .footer-tagline { font-size:0.8rem; letter-spacing:3px; color:var(--gold); margin-bottom:2rem; }
 .footer-links { display:flex; gap:2rem; justify-content:center; flex-wrap:wrap; margin-bottom:2rem; }
@@ -366,6 +376,37 @@ footer { background:linear-gradient(to bottom, #3d1a20, var(--dark)); color:rgba
   .cat-name { font-size:0.75rem; }
   .products-grid { grid-template-columns:repeat(2,1fr); gap:0.6rem; }
 }
+
+/* ===== SCROLL GRADIENT TEXT ADAPTATION ===== */
+/* Top sections (light bg) keep dark text - default */
+/* Bottom sections (dark bg) need light text */
+#about, #social { color: #fff; }
+#about .section-title, #social .section-title { color: #fff; }
+#about .section-title em, #social .section-title em { color: var(--rose-light); }
+#about .section-tag, #social .section-tag { color: var(--gold); }
+#about .section-line, #social .section-line { background: linear-gradient(90deg,transparent,var(--rose-light),transparent); }
+#social p { color: rgba(255,255,255,0.6) !important; }
+.about-desc { color: rgba(255,255,255,0.8); }
+.stat-num { color: var(--rose-light) !important; }
+.stat-label { color: rgba(255,255,255,0.5) !important; }
+.stat-item { background: rgba(255,255,255,0.07) !important; border-color: rgba(255,255,255,0.1) !important; }
+.feat-item { background: rgba(255,255,255,0.06) !important; border-color: rgba(255,255,255,0.08) !important; }
+.feat-text h4 { color: #fff !important; }
+.feat-text p { color: rgba(255,255,255,0.55) !important; }
+footer { background: transparent; color: rgba(255,255,255,0.7); }
+.footer-logo { color: var(--rose-light); }
+
+/* Marquee stays as accent */
+.marquee-wrap { background: rgba(168,92,102,0.5); backdrop-filter: blur(4px); }
+
+/* Products section - mid gradient so cards need white bg */
+.product-card { background: rgba(255,255,255,0.92) !important; }
+.cat-card { background: rgba(255,255,255,0.88) !important; }
+.cat-card.active { background: rgba(247,232,234,0.95) !important; }
+
+/* Scrollbar matches gradient */
+::-webkit-scrollbar-thumb { background: var(--rose); }
+
 </style>
 </head>
 <body>
@@ -515,7 +556,7 @@ footer { background:linear-gradient(to bottom, #3d1a20, var(--dark)); color:rgba
 </section>
 
 <!-- ABOUT + SOCIAL merged -->
-<div style="background:linear-gradient(to bottom, #e8d0c8 0%, #c4908a 8%, #7a3040 20%, var(--dark) 40%, #3d1a20 100%)">
+<div>
 
 <section id="about" class="about-section reveal" style="background:transparent">
   <div class="about-inner">
