@@ -445,6 +445,81 @@ footer { background: transparent; color: rgba(255,255,255,0.7); }
 .empty-state p { color: rgba(255,255,255,0.7) !important; }
 .empty-state i { color: rgba(255,255,255,0.3) !important; }
 
+
+/* ===== DARK THEME — HEADER ===== */
+header { background: rgba(42,26,30,0.85) !important; border-bottom: 1px solid rgba(201,123,132,0.2) !important; }
+header.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.4) !important; }
+nav a { color: rgba(255,255,255,0.7) !important; }
+nav a:hover { color: var(--rose-light) !important; }
+.logo-name { color: var(--rose-light) !important; }
+.cart-btn { color: rgba(255,255,255,0.85) !important; }
+.cart-btn:hover { color: var(--rose-light) !important; }
+.admin-btn { border-color: rgba(201,123,132,0.4) !important; color: var(--rose-light) !important; }
+.admin-btn:hover { background: var(--rose) !important; color: #fff !important; }
+.hamburger { color: rgba(255,255,255,0.85) !important; }
+
+/* ===== DARK THEME — CART SIDEBAR ===== */
+.cart-sidebar { background: linear-gradient(to bottom, #2a1a1e, #3d1a20) !important; }
+.cart-header { border-bottom: 1px solid rgba(255,255,255,0.08) !important; }
+.cart-header h2 { color: #fff !important; }
+.cart-close { color: rgba(255,255,255,0.6) !important; }
+.cart-close:hover { color: var(--rose-light) !important; }
+.cart-item { border-bottom: 1px solid rgba(255,255,255,0.07) !important; }
+.cart-item-name { color: #fff !important; }
+.cart-item-price { color: var(--rose-light) !important; }
+.cart-item-img { background: rgba(255,255,255,0.08) !important; }
+.qty-btn { border-color: rgba(255,255,255,0.2) !important; background: transparent !important; color: var(--rose-light) !important; }
+.qty-btn:hover { background: var(--rose) !important; color: #fff !important; }
+.qty-val { color: #fff !important; }
+.cart-remove { color: rgba(255,255,255,0.35) !important; }
+.cart-remove:hover { color: var(--rose-light) !important; }
+.cart-empty p { color: rgba(255,255,255,0.5) !important; }
+.cart-empty i { color: rgba(255,255,255,0.15) !important; }
+.cart-footer { background: rgba(0,0,0,0.25) !important; border-top: 1px solid rgba(255,255,255,0.08) !important; }
+.cart-total { color: #fff !important; }
+.customer-form input, .customer-form select, #cust-gov { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.15) !important; color: #fff !important; }
+.customer-form input::placeholder { color: rgba(255,255,255,0.4) !important; }
+.shipping-opt { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.2) !important; color: rgba(255,255,255,0.8) !important; }
+.shipping-opt.selected { background: rgba(201,123,132,0.3) !important; border-color: var(--rose) !important; color: #fff !important; }
+.cart-shipping label { color: rgba(255,255,255,0.6) !important; }
+
+/* ===== DARK THEME — PRODUCT MODAL ===== */
+.modal-box { background: linear-gradient(135deg, #3d1a20, #2a1a1e) !important; border: 1px solid rgba(201,123,132,0.2); }
+.modal-name { color: #fff !important; }
+.modal-desc { color: rgba(255,255,255,0.65) !important; }
+.modal-price { color: var(--rose-light) !important; }
+.modal-close { background: rgba(255,255,255,0.1) !important; color: rgba(255,255,255,0.7) !important; }
+.modal-close:hover { background: var(--rose) !important; color: #fff !important; }
+.modal-no-img { background: linear-gradient(135deg,rgba(201,123,132,0.3),rgba(168,92,102,0.2)) !important; }
+#related-products-wrap { border-top-color: rgba(255,255,255,0.08) !important; }
+#related-products-wrap > div { color: rgba(255,255,255,0.5) !important; }
+
+/* ===== DARK THEME — ADMIN PANEL ===== */
+.admin-panel { background: linear-gradient(to bottom, #2a1a1e, #1a0f12) !important; border: 1px solid rgba(201,123,132,0.2); }
+.admin-header { background: linear-gradient(135deg, #3d1a20, #6b2535) !important; border-radius: 24px 24px 0 0; }
+.admin-header h2 { color: #fff !important; }
+.admin-header p { color: rgba(255,255,255,0.55) !important; }
+.admin-close { color: rgba(255,255,255,0.6) !important; }
+.admin-close:hover { background: rgba(255,255,255,0.1) !important; color: #fff !important; }
+.admin-tabs { border-bottom: 1px solid rgba(255,255,255,0.08) !important; }
+.admin-tab { color: rgba(255,255,255,0.5) !important; background: transparent !important; }
+.admin-tab.active { color: #fff !important; border-bottom-color: var(--rose-light) !important; }
+.admin-tab:hover { color: rgba(255,255,255,0.8) !important; }
+.form-group label { color: rgba(255,255,255,0.75) !important; }
+.form-group input, .form-group select, .form-group textarea { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.15) !important; color: #fff !important; }
+.form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.35) !important; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--rose) !important; background: rgba(255,255,255,0.12) !important; }
+.admin-product-item { background: rgba(255,255,255,0.06) !important; border-color: rgba(255,255,255,0.08) !important; }
+.admin-product-item:hover { background: rgba(255,255,255,0.1) !important; }
+.admin-p-name { color: #fff !important; }
+.admin-p-price { color: rgba(255,255,255,0.55) !important; }
+.admin-login { background: transparent !important; }
+.admin-login h3 { color: #fff !important; }
+.admin-login p { color: rgba(255,255,255,0.55) !important; }
+#admin-pass { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.2) !important; color: #fff !important; }
+#admin-pass::placeholder { color: rgba(255,255,255,0.35) !important; }
+.admin-login button { background: linear-gradient(135deg, var(--rose), var(--rose-deep)) !important; }
+
 </style>
 </head>
 <body>
