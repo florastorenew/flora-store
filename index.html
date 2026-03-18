@@ -802,10 +802,7 @@ nav a:hover { color: var(--rose-light) !important; }
     <button class="chat-q-btn" onclick="chatAnswer('payment')">💳 بتدفعوا إزاي؟</button>
     <button class="chat-q-btn" onclick="chatAnswer('message')">💌 ممكن أكتب رسالة مع الهدية؟</button>
     <button class="chat-q-btn" onclick="chatAnswer('boxes')">🎁 في بوكسات هدايا جاهزة؟</button>
-  </div>
-</div>
-
-<!-- FLOATING WHATSAPP -->
+    <button onclick="toggleChat();document.getElementById('products').scrollIntoView({behavior:'smooth'})" style="width:100%;padding:0.6rem;background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:#fff;border:none;border-radius:10px;font-family:'Tajawal',sans-serif;font-size:0.85rem;cursor:pointer;margin-top:0.3rem;font-weight:600">🛍️ يلا نتسوق!</button>
 <a href="https://wa.me/201147106979" target="_blank" class="float-wa" title="تواصلي معنا على واتساب">
   <i class="fab fa-whatsapp"></i>
 </a>
@@ -2051,6 +2048,7 @@ function chatAnswer(key) {
       <button class="chat-q-btn" onclick="chatAnswer('message')">💌 ممكن أكتب رسالة مع الهدية؟</button>
       <button class="chat-q-btn" onclick="chatAnswer('boxes')">🎁 في بوكسات هدايا جاهزة؟</button>
       <a href="https://wa.me/201147106979" target="_blank" style="display:block;text-align:center;padding:0.6rem;background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;border-radius:10px;font-size:0.82rem;text-decoration:none;margin-top:0.3rem">💬 تكلمي معانا على واتساب</a>
+      <button onclick="toggleChat();document.getElementById('products').scrollIntoView({behavior:'smooth'})" style="width:100%;padding:0.6rem;background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:#fff;border:none;border-radius:10px;font-family:'Tajawal',sans-serif;font-size:0.82rem;cursor:pointer;margin-top:0.4rem">🛍️ يلا نتسوق!</button>
     `;
     msgs.scrollTop = msgs.scrollHeight;
   }, 600);
