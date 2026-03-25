@@ -1025,8 +1025,11 @@ nav a:hover { color: var(--rose-light) !important; }
 
         <!-- ORDERS -->
         <div class="admin-section" id="tab-orders">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem">
-            <div style="font-size:1rem;font-weight:700;color:#fff">🧾 الأوردرات</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem">
+            <div style="display:flex;gap:0.5rem">
+              <button id="orders-sub-active" onclick="switchOrdersTab('active')" style="padding:0.4rem 1rem;border-radius:20px;border:1px solid var(--rose);background:var(--rose);color:#fff;font-family:'Tajawal',sans-serif;font-size:0.8rem;cursor:pointer">🛍️ النشطة</button>
+              <button id="orders-sub-archive" onclick="switchOrdersTab('archive')" style="padding:0.4rem 1rem;border-radius:20px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:rgba(255,255,255,0.6);font-family:'Tajawal',sans-serif;font-size:0.8rem;cursor:pointer">✅ الأرشيف</button>
+            </div>
             <button onclick="loadAdminOrders()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:10px;padding:0.4rem 1rem;font-family:'Tajawal',sans-serif;font-size:0.82rem;cursor:pointer">🔄 تحديث</button>
           </div>
           <div id="admin-orders-list"></div>
@@ -1698,14 +1701,40 @@ async function updateOrderStatusCloud(id, status) {
   });
 }
 
+let currentOrdersTab = 'active';
+
+function switchOrdersTab(tab) {
+  currentOrdersTab = tab;
+  const activeBtn = document.getElementById('orders-sub-active');
+  const archiveBtn = document.getElementById('orders-sub-archive');
+  if (tab === 'active') {
+    activeBtn.style.background = 'var(--rose)';
+    activeBtn.style.color = '#fff';
+    activeBtn.style.borderColor = 'var(--rose)';
+    archiveBtn.style.background = 'transparent';
+    archiveBtn.style.color = 'rgba(255,255,255,0.6)';
+    archiveBtn.style.borderColor = 'rgba(255,255,255,0.2)';
+  } else {
+    archiveBtn.style.background = '#27ae60';
+    archiveBtn.style.color = '#fff';
+    archiveBtn.style.borderColor = '#27ae60';
+    activeBtn.style.background = 'transparent';
+    activeBtn.style.color = 'rgba(255,255,255,0.6)';
+    activeBtn.style.borderColor = 'rgba(255,255,255,0.2)';
+  }
+  loadAdminOrders();
+}
+
 async function loadAdminOrders() {
   const list = document.getElementById('admin-orders-list');
   list.innerHTML = `<div style="text-align:center;color:rgba(255,255,255,0.5);padding:1.5rem">جاري التحميل...</div>`;
   try {
-    const res = await fetch(`${SB_URL}/rest/v1/orders?select=*&order=created_at.desc`, { headers: SB_HEADERS });
+    const filter = currentOrdersTab === 'archive' ? '&status=eq.delivered' : '&status=neq.delivered';
+    const res = await fetch(`${SB_URL}/rest/v1/orders?select=*&order=created_at.desc${filter}`, { headers: SB_HEADERS });
     const orders = await res.json();
-    if (!orders.length) {
-      list.innerHTML = `<div style="text-align:center;color:rgba(255,255,255,0.4);padding:2rem;font-size:0.9rem">لا توجد أوردرات بعد 🌸</div>`;
+    if (!Array.isArray(orders) || !orders.length) {
+      const msg = currentOrdersTab === 'archive' ? 'الأرشيف فاضي دلوقتي 🌸' : 'مفيش أوردرات نشطة دلوقتي 🌸';
+      list.innerHTML = `<div style="text-align:center;color:rgba(255,255,255,0.4);padding:2rem;font-size:0.9rem">${msg}</div>`;
       return;
     }
     list.innerHTML = orders.map(o => {
@@ -1713,7 +1742,7 @@ async function loadAdminOrders() {
       const items = Array.isArray(o.items) ? o.items : [];
       const date = new Date(o.created_at).toLocaleDateString('ar-EG');
       return `
-        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:1rem;margin-bottom:0.8rem">
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:1rem;margin-bottom:0.8rem;${o.status==='delivered'?'opacity:0.7':''}">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;flex-wrap:wrap;gap:0.5rem">
             <div>
               <span style="font-weight:700;color:#fff;font-size:0.9rem">${o.id}</span>
@@ -1725,11 +1754,12 @@ async function loadAdminOrders() {
           <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:0.6rem">📍 ${o.customer_address}</div>
           <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:0.8rem">${items.map(i=>`${i.name} ×${i.qty}`).join(' • ')}</div>
           <div style="font-size:0.85rem;color:var(--rose-light);font-weight:700;margin-bottom:0.8rem">💰 الإجمالي: ${(o.total||0).toLocaleString()} جم</div>
+          ${currentOrdersTab === 'active' ? `
           <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
             ${Object.entries(ORDER_STATUSES).map(([key, val]) => `
               <button onclick="changeOrderStatus('${o.id}', '${key}', this)" style="padding:0.35rem 0.8rem;border-radius:8px;border:1px solid ${o.status===key?val.color:'rgba(255,255,255,0.15)'};background:${o.status===key?val.color+'33':'transparent'};color:${o.status===key?val.color:'rgba(255,255,255,0.6)'};font-family:'Tajawal',sans-serif;font-size:0.75rem;cursor:pointer;transition:all 0.2s">${val.label}</button>
             `).join('')}
-          </div>
+          </div>` : `<div style="font-size:0.75rem;color:rgba(255,255,255,0.3);text-align:center">✅ تم الأرشفة</div>`}
         </div>
       `;
     }).join('');
@@ -1740,7 +1770,12 @@ async function loadAdminOrders() {
 
 async function changeOrderStatus(orderId, newStatus, btn) {
   await updateOrderStatusCloud(orderId, newStatus);
-  showToast(`${ORDER_STATUSES[newStatus].label} ✅`, 'happy');
+  const st = ORDER_STATUSES[newStatus];
+  if (newStatus === 'delivered') {
+    showToast(`✅ الأوردر اتسلم وانتقل للأرشيف 🌸`, 'happy');
+  } else {
+    showToast(`${st.label} ✅`, 'happy');
+  }
   loadAdminOrders();
 }
 
