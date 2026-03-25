@@ -1030,7 +1030,10 @@ nav a:hover { color: var(--rose-light) !important; }
               <button id="orders-sub-active" onclick="switchOrdersTab('active')" style="padding:0.4rem 1rem;border-radius:20px;border:1px solid var(--rose);background:var(--rose);color:#fff;font-family:'Tajawal',sans-serif;font-size:0.8rem;cursor:pointer">🛍️ النشطة</button>
               <button id="orders-sub-archive" onclick="switchOrdersTab('archive')" style="padding:0.4rem 1rem;border-radius:20px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:rgba(255,255,255,0.6);font-family:'Tajawal',sans-serif;font-size:0.8rem;cursor:pointer">✅ الأرشيف</button>
             </div>
-            <button onclick="loadAdminOrders()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:10px;padding:0.4rem 1rem;font-family:'Tajawal',sans-serif;font-size:0.82rem;cursor:pointer">🔄 تحديث</button>
+            <div style="display:flex;gap:0.5rem">
+              <button id="clear-archive-btn" onclick="clearAllArchive()" style="display:none;padding:0.4rem 1rem;border-radius:20px;border:1px solid rgba(231,76,60,0.5);background:rgba(231,76,60,0.15);color:#e74c3c;font-family:'Tajawal',sans-serif;font-size:0.8rem;cursor:pointer">🗑️ مسح الكل</button>
+              <button onclick="loadAdminOrders()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:10px;padding:0.4rem 1rem;font-family:'Tajawal',sans-serif;font-size:0.82rem;cursor:pointer">🔄 تحديث</button>
+            </div>
           </div>
           <div id="admin-orders-list"></div>
         </div>
@@ -1707,6 +1710,7 @@ function switchOrdersTab(tab) {
   currentOrdersTab = tab;
   const activeBtn = document.getElementById('orders-sub-active');
   const archiveBtn = document.getElementById('orders-sub-archive');
+  const clearBtn = document.getElementById('clear-archive-btn');
   if (tab === 'active') {
     activeBtn.style.background = 'var(--rose)';
     activeBtn.style.color = '#fff';
@@ -1714,6 +1718,7 @@ function switchOrdersTab(tab) {
     archiveBtn.style.background = 'transparent';
     archiveBtn.style.color = 'rgba(255,255,255,0.6)';
     archiveBtn.style.borderColor = 'rgba(255,255,255,0.2)';
+    if (clearBtn) clearBtn.style.display = 'none';
   } else {
     archiveBtn.style.background = '#27ae60';
     archiveBtn.style.color = '#fff';
@@ -1721,7 +1726,22 @@ function switchOrdersTab(tab) {
     activeBtn.style.background = 'transparent';
     activeBtn.style.color = 'rgba(255,255,255,0.6)';
     activeBtn.style.borderColor = 'rgba(255,255,255,0.2)';
+    if (clearBtn) clearBtn.style.display = 'block';
   }
+  loadAdminOrders();
+}
+
+async function deleteOrder(orderId) {
+  if (!confirm('هتمسح الأوردر ده؟')) return;
+  await fetch(`${SB_URL}/rest/v1/orders?id=eq.${orderId}`, { method: 'DELETE', headers: SB_HEADERS });
+  showToast('اتمسح خلاص 🗑️', 'error');
+  loadAdminOrders();
+}
+
+async function clearAllArchive() {
+  if (!confirm('هتمسح كل الأوردرات اللي في الأرشيف؟ مش هترجع!')) return;
+  await fetch(`${SB_URL}/rest/v1/orders?status=eq.delivered`, { method: 'DELETE', headers: SB_HEADERS });
+  showToast('الأرشيف اتمسح كله 🗑️', 'error');
   loadAdminOrders();
 }
 
@@ -1759,7 +1779,11 @@ async function loadAdminOrders() {
             ${Object.entries(ORDER_STATUSES).map(([key, val]) => `
               <button onclick="changeOrderStatus('${o.id}', '${key}', this)" style="padding:0.35rem 0.8rem;border-radius:8px;border:1px solid ${o.status===key?val.color:'rgba(255,255,255,0.15)'};background:${o.status===key?val.color+'33':'transparent'};color:${o.status===key?val.color:'rgba(255,255,255,0.6)'};font-family:'Tajawal',sans-serif;font-size:0.75rem;cursor:pointer;transition:all 0.2s">${val.label}</button>
             `).join('')}
-          </div>` : `<div style="font-size:0.75rem;color:rgba(255,255,255,0.3);text-align:center">✅ تم الأرشفة</div>`}
+          </div>` : `
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="font-size:0.75rem;color:rgba(255,255,255,0.3)">✅ تم الأرشفة</div>
+            <button onclick="deleteOrder('${o.id}')" style="padding:0.3rem 0.8rem;border-radius:8px;border:1px solid rgba(231,76,60,0.4);background:rgba(231,76,60,0.1);color:#e74c3c;font-family:'Tajawal',sans-serif;font-size:0.75rem;cursor:pointer">🗑️ مسح</button>
+          </div>`}
         </div>
       `;
     }).join('');
