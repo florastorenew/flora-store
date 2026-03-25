@@ -566,6 +566,7 @@ nav a:hover { color: var(--rose-light) !important; }
     <a href="#home" onclick="closeNav()">الرئيسية</a>
     <a href="#products" onclick="closeNav()">المنتجات</a>
     <a href="#about" onclick="closeNav()">عن فلورا</a>
+    <a href="#track" onclick="closeNav()">تتبع أوردرك</a>
     <a href="#social" onclick="closeNav()">تواصلي معنا</a>
   </nav>
 
@@ -752,6 +753,22 @@ nav a:hover { color: var(--rose-light) !important; }
 
 </div>
 
+<!-- ORDER TRACKING -->
+<section id="track" class="reveal" style="background:transparent;padding:4rem 3rem">
+  <div class="section-header">
+    <span class="section-tag">✦ Track Your Order</span>
+    <h2 class="section-title">تتبع <em>أوردرك</em></h2>
+    <div class="section-line"></div>
+  </div>
+  <div style="max-width:480px;margin:0 auto">
+    <div style="display:flex;gap:0.8rem">
+      <input id="track-input" type="text" placeholder="أدخل كود الأوردر — مثال: FLR-XXXX-XXXX" style="flex:1;padding:0.9rem 1.2rem;border:1.5px solid rgba(255,255,255,0.2);border-radius:14px;background:rgba(255,255,255,0.1);color:#fff;font-family:'Tajawal',sans-serif;font-size:0.95rem;outline:none;backdrop-filter:blur(8px)" />
+      <button onclick="trackOrder()" style="padding:0.9rem 1.5rem;background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:#fff;border:none;border-radius:14px;font-family:'Tajawal',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;white-space:nowrap">تتبع 🔍</button>
+    </div>
+    <div id="track-result" style="margin-top:1.2rem"></div>
+  </div>
+</section>
+
 <!-- FLOATING WHATSAPP -->
 <a href="https://wa.me/201147106979" target="_blank" class="float-wa" title="تواصلي معنا على واتساب">
   <i class="fab fa-whatsapp"></i>
@@ -915,6 +932,7 @@ nav a:hover { color: var(--rose-light) !important; }
           <button class="admin-tab active" onclick="switchTab('add',this)">➕ إضافة منتج</button>
           <button class="admin-tab" onclick="switchTab('manage',this)">📦 إدارة المنتجات</button>
           <button class="admin-tab" onclick="switchTab('soldout',this)">🚫 نفذت الكمية</button>
+          <button class="admin-tab" onclick="switchTab('orders',this)">🧾 الأوردرات</button>
           <button class="admin-tab" onclick="switchTab('settings',this)">⚙️ الإعدادات</button>
         </div>
 
@@ -1003,6 +1021,15 @@ nav a:hover { color: var(--rose-light) !important; }
         <!-- SOLD OUT -->
         <div class="admin-section" id="tab-soldout">
           <div id="soldout-products-list"></div>
+        </div>
+
+        <!-- ORDERS -->
+        <div class="admin-section" id="tab-orders">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem">
+            <div style="font-size:1rem;font-weight:700;color:#fff">🧾 الأوردرات</div>
+            <button onclick="loadAdminOrders()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:10px;padding:0.4rem 1rem;font-family:'Tajawal',sans-serif;font-size:0.82rem;cursor:pointer">🔄 تحديث</button>
+          </div>
+          <div id="admin-orders-list"></div>
         </div>
 
         <!-- SETTINGS -->
@@ -1474,6 +1501,32 @@ function sendWhatsAppOrder() {
   msg += `━━━━━━━━━━━━━━━━━━\n`;
   msg += `شكراً لاختيارك فلورا ستور 🌸`;
   window.open(`https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
+  // Save order to Supabase
+  saveOrderToCloud({
+    id: orderCode,
+    customer_name: name,
+    customer_phone: phone,
+    customer_address: `${selectedShipping.type} — ${address}`,
+    items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price, color: i.selectedColor||null })),
+    total,
+    status: 'pending'
+  });
+
+  // ===== SAVE ORDER TO SUPABASE =====
+  const orderData = {
+    id: orderCode,
+    customer_name: name,
+    customer_phone: phone,
+    customer_address: `${selectedShipping.type} — ${address}`,
+    items: cart.map(item => ({ name: item.name, qty: item.qty, price: item.price, color: item.selectedColor || null })),
+    total: total,
+    status: 'pending'
+  };
+  fetch(`${SB_URL}/rest/v1/orders`, {
+    method: 'POST',
+    headers: { ...SB_HEADERS, 'Prefer': 'return=representation' },
+    body: JSON.stringify(orderData)
+  }).catch(e => console.error('Order save error:', e));
   // Deduct stock
   cart.forEach(item => {
     const p = products.find(x => String(x.id) === String(item.id));
@@ -1616,6 +1669,123 @@ function switchTab(tab, el) {
   if (tab === 'add') { renderBadgeOptions(); }
   if (tab === 'settings') loadSettings();
   if (tab === 'soldout') loadSoldOutProducts();
+  if (tab === 'orders') loadAdminOrders();
+}
+
+// ===== ORDERS SYSTEM =====
+const ORDER_STATUSES = {
+  pending:   { label: '⏳ قيد المراجعة',       color: '#f39c12' },
+  preparing: { label: '📦 جاري التجهيز',        color: '#3498db' },
+  shipped:   { label: '🚚 مع مندوب الشحن',      color: '#9b59b6' },
+  delivered: { label: '✅ تم التسليم',           color: '#27ae60' },
+};
+
+async function saveOrderToCloud(order) {
+  try {
+    await fetch(`${SB_URL}/rest/v1/orders`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Prefer': 'return=representation' },
+      body: JSON.stringify(order)
+    });
+  } catch(e) { console.error('Order save error:', e); }
+}
+
+async function updateOrderStatusCloud(id, status) {
+  await fetch(`${SB_URL}/rest/v1/orders?id=eq.${id}`, {
+    method: 'PATCH',
+    headers: { ...SB_HEADERS, 'Prefer': 'return=representation' },
+    body: JSON.stringify({ status })
+  });
+}
+
+async function loadAdminOrders() {
+  const list = document.getElementById('admin-orders-list');
+  list.innerHTML = `<div style="text-align:center;color:rgba(255,255,255,0.5);padding:1.5rem">جاري التحميل...</div>`;
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/orders?select=*&order=created_at.desc`, { headers: SB_HEADERS });
+    const orders = await res.json();
+    if (!orders.length) {
+      list.innerHTML = `<div style="text-align:center;color:rgba(255,255,255,0.4);padding:2rem;font-size:0.9rem">لا توجد أوردرات بعد 🌸</div>`;
+      return;
+    }
+    list.innerHTML = orders.map(o => {
+      const st = ORDER_STATUSES[o.status] || ORDER_STATUSES.pending;
+      const items = Array.isArray(o.items) ? o.items : [];
+      const date = new Date(o.created_at).toLocaleDateString('ar-EG');
+      return `
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:1rem;margin-bottom:0.8rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;flex-wrap:wrap;gap:0.5rem">
+            <div>
+              <span style="font-weight:700;color:#fff;font-size:0.9rem">${o.id}</span>
+              <span style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-right:0.6rem">${date}</span>
+            </div>
+            <span style="background:${st.color}22;color:${st.color};border:1px solid ${st.color}55;border-radius:20px;padding:0.2rem 0.8rem;font-size:0.78rem;font-weight:600">${st.label}</span>
+          </div>
+          <div style="font-size:0.82rem;color:rgba(255,255,255,0.7);margin-bottom:0.3rem">👤 ${o.customer_name} &nbsp;|&nbsp; 📱 ${o.customer_phone}</div>
+          <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:0.6rem">📍 ${o.customer_address}</div>
+          <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:0.8rem">${items.map(i=>`${i.name} ×${i.qty}`).join(' • ')}</div>
+          <div style="font-size:0.85rem;color:var(--rose-light);font-weight:700;margin-bottom:0.8rem">💰 الإجمالي: ${(o.total||0).toLocaleString()} جم</div>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+            ${Object.entries(ORDER_STATUSES).map(([key, val]) => `
+              <button onclick="changeOrderStatus('${o.id}', '${key}', this)" style="padding:0.35rem 0.8rem;border-radius:8px;border:1px solid ${o.status===key?val.color:'rgba(255,255,255,0.15)'};background:${o.status===key?val.color+'33':'transparent'};color:${o.status===key?val.color:'rgba(255,255,255,0.6)'};font-family:'Tajawal',sans-serif;font-size:0.75rem;cursor:pointer;transition:all 0.2s">${val.label}</button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch(e) {
+    list.innerHTML = `<div style="text-align:center;color:#e74c3c;padding:1.5rem">خطأ في تحميل الأوردرات</div>`;
+  }
+}
+
+async function changeOrderStatus(orderId, newStatus, btn) {
+  await updateOrderStatusCloud(orderId, newStatus);
+  showToast(`${ORDER_STATUSES[newStatus].label} ✅`, 'happy');
+  loadAdminOrders();
+}
+
+async function trackOrder() {
+  const code = document.getElementById('track-input').value.trim().toUpperCase();
+  const result = document.getElementById('track-result');
+  if (!code) { result.innerHTML = `<div style="color:rgba(255,255,255,0.5);text-align:center;padding:1rem">اكتب كود الأوردر الأول 🌸</div>`; return; }
+  result.innerHTML = `<div style="color:rgba(255,255,255,0.5);text-align:center;padding:1rem">جاري البحث...</div>`;
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/orders?id=eq.${code}&select=*`, { headers: SB_HEADERS });
+    const data = await res.json();
+    if (!data.length) {
+      result.innerHTML = `<div style="background:rgba(231,76,60,0.15);border:1px solid rgba(231,76,60,0.3);border-radius:14px;padding:1.2rem;text-align:center;color:#e74c3c">❌ مش لاقيين أوردر بالكود ده<br><small style="color:rgba(255,255,255,0.4);font-size:0.78rem">تأكد من الكود وحاول تاني</small></div>`;
+      return;
+    }
+    const o = data[0];
+    const st = ORDER_STATUSES[o.status] || ORDER_STATUSES.pending;
+    const steps = ['pending','preparing','shipped','delivered'];
+    const currentStep = steps.indexOf(o.status);
+    result.innerHTML = `
+      <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:18px;padding:1.5rem;backdrop-filter:blur(10px)">
+        <div style="text-align:center;margin-bottom:1.2rem">
+          <div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:0.3rem">كود الأوردر</div>
+          <div style="font-size:1.1rem;font-weight:700;color:#fff;letter-spacing:2px">${o.id}</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;position:relative">
+          <div style="position:absolute;top:20px;right:10%;left:10%;height:2px;background:rgba(255,255,255,0.1);z-index:0"></div>
+          ${steps.map((s,i) => {
+            const sv = ORDER_STATUSES[s];
+            const done = i <= currentStep;
+            return `<div style="display:flex;flex-direction:column;align-items:center;gap:0.4rem;z-index:1;flex:1">
+              <div style="width:40px;height:40px;border-radius:50%;background:${done?sv.color:'rgba(255,255,255,0.1)'};border:2px solid ${done?sv.color:'rgba(255,255,255,0.2)'};display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all 0.3s">${sv.label.split(' ')[0]}</div>
+              <div style="font-size:0.65rem;color:${done?sv.color:'rgba(255,255,255,0.35)'};text-align:center;max-width:60px;line-height:1.3">${sv.label.replace(/^[^\s]+\s/,'')}</div>
+            </div>`;
+          }).join('')}
+        </div>
+        <div style="text-align:center;background:${st.color}22;border:1px solid ${st.color}55;border-radius:12px;padding:0.8rem">
+          <div style="color:${st.color};font-weight:700;font-size:0.95rem">${st.label}</div>
+        </div>
+        <div style="margin-top:1rem;font-size:0.82rem;color:rgba(255,255,255,0.5);text-align:center">👤 ${o.customer_name} &nbsp;|&nbsp; 📍 ${o.customer_address}</div>
+      </div>
+    `;
+  } catch(e) {
+    result.innerHTML = `<div style="color:#e74c3c;text-align:center;padding:1rem">حصل خطأ، حاول تاني</div>`;
+  }
 }
 
 function loadSoldOutProducts() {
