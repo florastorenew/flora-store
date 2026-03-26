@@ -646,6 +646,14 @@ nav a:hover { color: var(--rose-light) !important; }
       <span class="cat-icon">🎁</span>
       <div class="cat-name">بوكسات</div>
     </div>
+    <div class="cat-card" onclick="filterCategory('bags',this)">
+      <span class="cat-icon">👜</span>
+      <div class="cat-name">شنط</div>
+    </div>
+    <div class="cat-card" onclick="filterCategory('home',this)">
+      <span class="cat-icon">🏠</span>
+      <div class="cat-name">أدوات منزلية</div>
+    </div>
   </div>
 </section>
 
@@ -966,6 +974,8 @@ nav a:hover { color: var(--rose-light) !important; }
                 <option value="mugs">☕ مجات</option>
                 <option value="mirrors">🪞 مرايات</option>
                 <option value="boxes">🎁 بوكسات هدايا</option>
+                <option value="bags">👜 شنط</option>
+                <option value="home">🏠 أدوات منزلية</option>
               </select>
             </div>
           </div>
@@ -1168,8 +1178,8 @@ let selectedShipping = { type: 'inside', cost: settings.shipInside || 45 };
 let editingId = null;
 let imgData = null;
 
-const catEmoji = { accessories:'💍', watches:'⌚', medals:'🏅', labubu:'🧸', candles:'🕯️', mugs:'☕', mirrors:'🪞', boxes:'🎁' };
-const catNames = { accessories:'إكسسوارات', watches:'ساعات', medals:'ميداليات', labubu:'لبوبو', candles:'شمع', mugs:'مجات', mirrors:'مرايات', boxes:'بوكسات' };
+const catEmoji = { accessories:'💍', watches:'⌚', medals:'🏅', labubu:'🧸', candles:'🕯️', mugs:'☕', mirrors:'🪞', boxes:'🎁', bags:'👜', home:'🏠' };
+const catNames = { accessories:'إكسسوارات', watches:'ساعات', medals:'ميداليات', labubu:'لبوبو', candles:'شمع', mugs:'مجات', mirrors:'مرايات', boxes:'بوكسات', bags:'شنط', home:'أدوات منزلية' };
 
 // ===== INIT =====
 window.addEventListener('load', () => {
