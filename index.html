@@ -236,31 +236,6 @@ section { padding:6rem 3rem; position:relative; background:transparent; }
   .back-top { bottom:1.5rem; right:1rem; }
 }
 
-/* WISHLIST & SHARE */
-.wishlist-btn { position:absolute; top:0.6rem; left:0.6rem; width:32px; height:32px; background:rgba(255,255,255,0.9); border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.9rem; transition:all 0.3s; z-index:2; box-shadow:0 2px 8px rgba(0,0,0,0.15); }
-.wishlist-btn:hover { transform:scale(1.15); background:#fff; }
-.wishlist-btn.active { background:var(--rose); color:#fff; }
-.wishlist-btn.active i { color:#fff; }
-.wishlist-btn i { color:var(--rose); transition:all 0.3s; }
-
-/* ENHANCED CARD HOVER */
-.product-card { background:#fff; border-radius:20px; overflow:hidden; border:1px solid rgba(201,123,132,0.08); transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position:relative; cursor:pointer; }
-.product-card:hover { transform:translateY(-12px) scale(1.02); box-shadow:0 25px 60px rgba(201,123,132,0.35); border-color:rgba(201,123,132,0.3); }
-.product-card:hover .product-img-wrap img { transform:scale(1.1); }
-.product-img-wrap::after { content:''; position:absolute; inset:0; background:linear-gradient(to top, rgba(168,92,102,0.3), transparent); opacity:0; transition:opacity 0.4s; }
-.product-card:hover .product-img-wrap::after { opacity:1; }
-
-/* WELCOME POPUP */
-.welcome-overlay { position:fixed; inset:0; z-index:9000; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:1.5rem; animation:fadeIn 0.5s ease; }
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
-@keyframes fadeOut { from{opacity:1} to{opacity:0} }
-.welcome-box { background:linear-gradient(135deg,#2a1a1e,#3d1a20); border:1px solid rgba(201,123,132,0.3); border-radius:24px; padding:2.5rem 2rem; max-width:380px; width:100%; text-align:center; position:relative; animation:popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
-@keyframes popIn { from{opacity:0;transform:scale(0.8)} to{opacity:1;transform:scale(1)} }
-.welcome-close { position:absolute; top:1rem; left:1rem; background:rgba(255,255,255,0.1); border:none; color:#fff; width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:0.9rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
-.welcome-close:hover { background:var(--rose); }
-.welcome-petals { font-size:2.5rem; margin-bottom:0.5rem; animation:spin 4s linear infinite; display:inline-block; }
-@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-
 /* FOOTER */
 footer { background:transparent; color:rgba(255,255,255,0.7); padding:4rem 3rem 2rem; text-align:center; }
 .footer-logo { font-family:'Cormorant Garamond',serif; font-size:2.5rem; font-style:italic; color:var(--rose-light); letter-spacing:5px; margin-bottom:0.5rem; }
@@ -809,18 +784,6 @@ nav a:hover { color: var(--rose-light) !important; }
   <i class="fab fa-whatsapp"></i>
 </a>
 
-<!-- WELCOME POPUP -->
-<div class="welcome-overlay" id="welcome-overlay" style="display:none">
-  <div class="welcome-box">
-    <button class="welcome-close" onclick="closeWelcome()"><i class="fas fa-times"></i></button>
-    <div class="welcome-petals">🌸</div>
-    <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:#fff;margin-bottom:0.5rem">أهلاً بيكي! 🌸</h2>
-    <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;line-height:1.7;margin-bottom:1.5rem">مرحباً في Flora Store — كل إكسسوار بتقوليه قصة 💕<br>اكتشفي أحدث الكوليكشنات دلوقتي!</p>
-    <button onclick="closeWelcome();document.getElementById('products').scrollIntoView({behavior:'smooth'})" style="width:100%;padding:0.9rem;background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:#fff;border:none;border-radius:14px;font-family:'Tajawal',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;margin-bottom:0.6rem;letter-spacing:1px">🛍️ تسوقي دلوقتي</button>
-    <button onclick="closeWelcome()" style="width:100%;padding:0.6rem;background:transparent;color:rgba(255,255,255,0.4);border:none;font-family:'Tajawal',sans-serif;font-size:0.85rem;cursor:pointer">تصفح أولاً</button>
-  </div>
-</div>
-
 <!-- BACK TO TOP -->
 <button class="back-top" id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="رجوع للأعلى">
   <i class="fas fa-chevron-up"></i>
@@ -1242,7 +1205,6 @@ window.addEventListener('load', () => {
   }, 600);
   loadFromCloud();
   initReveal();
-  initWelcome();
 });
 
 // ===== PETALS =====
@@ -1360,13 +1322,9 @@ function renderProducts(list) {
       <div class="product-img-wrap">
         ${(p.img||p.image) ? `<img src="${p.img||p.image}" alt="${p.name}" loading="lazy">` : `<div class="product-no-img">${p.emoji || catEmoji[p.category] || '🌸'}</div>`}
         ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
-        <button class="wishlist-btn ${isWishlisted(p.id)?'active':''}" onclick="toggleWishlist('${p.id}');event.stopPropagation()" title="إضافة للمفضلة">
-          <i class="fas fa-heart"></i>
-        </button>
         ${p.outOfStock ? `<div class="oos-badge"><span>نفذت الكمية</span></div>` : `
         <div class="product-actions-overlay">
           <button class="overlay-btn" onclick="openModal('${p.id}');event.stopPropagation()" title="تفاصيل"><i class="fas fa-eye"></i></button>
-          <button class="overlay-btn" onclick="shareProduct('${p.id}');event.stopPropagation()" title="مشاركة"><i class="fas fa-share-alt"></i></button>
           <button class="overlay-btn" onclick="addToCart('${p.id}');event.stopPropagation()" title="أضيفي للسلة"><i class="fas fa-shopping-bag"></i></button>
         </div>`}
       </div>
@@ -2217,70 +2175,6 @@ function saveSettings() {
 // ===== SECRET ADMIN TRIGGER =====
 let secretClicks = 0;
 let secretTimer = null;
-// ===== WISHLIST =====
-let wishlist = JSON.parse(localStorage.getItem('flora_wishlist') || '[]');
-
-function isWishlisted(id) {
-  return wishlist.includes(String(id));
-}
-
-function toggleWishlist(id) {
-  const p = products.find(x => String(x.id) === String(id));
-  if (!p) return;
-  if (isWishlisted(id)) {
-    wishlist = wishlist.filter(x => x !== String(id));
-    showToast(`💔 "${p.name}" اتشالت من المفضلة`, 'warning');
-  } else {
-    wishlist.push(String(id));
-    showToast(`❤️ "${p.name}" اتضافت للمفضلة 🌸`, 'happy');
-  }
-  localStorage.setItem('flora_wishlist', JSON.stringify(wishlist));
-  // Update button UI without full re-render
-  const btns = document.querySelectorAll('.wishlist-btn');
-  btns.forEach(btn => {
-    const card = btn.closest('.product-card');
-    const onclick = btn.getAttribute('onclick') || '';
-    const match = onclick.match(/toggleWishlist\('([^']+)'\)/);
-    if (match && match[1] === String(id)) {
-      btn.classList.toggle('active', isWishlisted(id));
-    }
-  });
-}
-
-// ===== SHARE PRODUCT =====
-function shareProduct(id) {
-  const p = products.find(x => String(x.id) === String(id));
-  if (!p) return;
-  const url = `${window.location.origin}${window.location.pathname}#products`;
-  const text = `شوفي المنتج ده من Flora Store 🌸\n${p.name} — بـ ${p.price.toLocaleString()} جنيه\n${url}`;
-  if (navigator.share) {
-    navigator.share({ title: p.name, text, url }).catch(() => {});
-  } else {
-    navigator.clipboard.writeText(text).then(() => {
-      showToast('✅ اتكوبي اللينك! شاركيه مع صحبتك 🌸', 'happy');
-    }).catch(() => {
-      showToast('✅ اتكوبي اللينك!', 'happy');
-    });
-  }
-}
-
-// ===== WELCOME POPUP =====
-function closeWelcome() {
-  const overlay = document.getElementById('welcome-overlay');
-  overlay.style.animation = 'fadeOut 0.3s ease forwards';
-  setTimeout(() => overlay.style.display = 'none', 300);
-  sessionStorage.setItem('flora_welcomed', '1');
-}
-
-function initWelcome() {
-  if (!sessionStorage.getItem('flora_welcomed')) {
-    setTimeout(() => {
-      const overlay = document.getElementById('welcome-overlay');
-      overlay.style.display = 'flex';
-    }, 2500);
-  }
-}
-
 function secretClick() {
   secretClicks++;
   clearTimeout(secretTimer);
