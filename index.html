@@ -45,6 +45,8 @@ body { font-family: 'Tajawal', sans-serif; background: linear-gradient(to bottom
 #loader { position:fixed; inset:0; z-index:9999; background:linear-gradient(135deg,#2a1a1e,#3d1a20,#6b2535); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:1.5rem; transition:opacity 0.8s ease; }
 
 #loader .loader-logo { font-family:'Cormorant Garamond',serif; font-size:3.5rem; font-style:italic; color:#fff; letter-spacing:8px; animation:loaderFadeIn 0.8s ease forwards; opacity:0; }
+#loader .loader-flower { font-size:4rem; animation:flowerSpin 2s ease-in-out infinite; display:inline-block; margin-bottom:0.5rem; }
+@keyframes flowerSpin { 0%,100%{transform:rotate(0deg) scale(1)} 50%{transform:rotate(180deg) scale(1.1)} }
 #loader .loader-sub { font-size:0.7rem; letter-spacing:6px; color:var(--rose-light); text-transform:uppercase; animation:loaderFadeIn 1s 0.3s ease forwards; opacity:0; }
 #loader .loader-bar { width:150px; height:2px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden; margin-top:0.5rem; }
 #loader .loader-fill { height:100%; background:linear-gradient(90deg,var(--rose),var(--gold),var(--rose)); background-size:200% 100%; border-radius:2px; animation:load 1.5s ease forwards, shimmerLoad 1.5s linear infinite; }
@@ -575,6 +577,7 @@ nav a:hover { color: var(--rose-light) !important; }
 
 <!-- LOADER -->
 <div id="loader">
+  <div class="loader-flower">🌸</div>
   <div class="loader-logo">Flora</div>
   <div class="loader-sub">Store ✦</div>
   <div class="loader-bar"><div class="loader-fill"></div></div>
