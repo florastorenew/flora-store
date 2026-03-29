@@ -549,11 +549,11 @@ nav a:hover { color: var(--rose-light) !important; }
 
 /* ===== PARTICLES ===== */
 #particles-container { position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden; }
-.particle { position:absolute; border-radius:50%; pointer-events:none; animation:particleFloat linear infinite; opacity:0; }
+.particle { position:absolute; border-radius:50%; pointer-events:none; animation:particleFloat linear infinite; opacity:0; will-change:transform; }
 @keyframes particleFloat { 0%{transform:translateY(100vh) rotate(0deg);opacity:0} 10%{opacity:0.6} 90%{opacity:0.2} 100%{transform:translateY(-10vh) rotate(720deg);opacity:0} }
 
 /* ===== GLASSMORPHISM CARDS ===== */
-.product-card { background:rgba(255,255,255,0.1) !important; border:1px solid rgba(255,255,255,0.18) !important; backdrop-filter:blur(12px) !important; -webkit-backdrop-filter:blur(12px) !important; box-shadow:0 8px 32px rgba(168,92,102,0.2) !important; border-radius:20px; overflow:hidden; transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position:relative; cursor:none; }
+.product-card { background:rgba(255,255,255,0.1) !important; border:1px solid rgba(255,255,255,0.18) !important; backdrop-filter:blur(6px) !important; -webkit-backdrop-filter:blur(6px) !important; box-shadow:0 8px 32px rgba(168,92,102,0.2) !important; border-radius:20px; overflow:hidden; transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position:relative; cursor:none; }
 .product-card:hover { transform:translateY(-12px) scale(1.02) !important; box-shadow:0 25px 60px rgba(168,92,102,0.4) !important; border-color:rgba(201,123,132,0.5) !important; }
 .product-card::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.05),transparent); pointer-events:none; z-index:1; }
 
@@ -569,7 +569,7 @@ nav a:hover { color: var(--rose-light) !important; }
 .badge-bestseller { background:linear-gradient(135deg,var(--gold),#a0784a); }
 
 /* ===== ENHANCED PETALS ===== */
-.petal { position:fixed; opacity:0; animation:floatPetal linear infinite; z-index:0; filter:drop-shadow(0 2px 4px rgba(201,123,132,0.3)); }
+.petal { position:fixed; opacity:0; animation:floatPetal linear infinite; z-index:0; will-change:transform; }
 
 /* ===== MODAL ENTRANCE ===== */
 .modal-overlay.open .modal-box { animation:modalEntrance 0.5s cubic-bezier(0.175,0.885,0.32,1.275) forwards; }
@@ -581,10 +581,6 @@ nav a:hover { color: var(--rose-light) !important; }
 </style>
 </head>
 <body>
-<!-- CUSTOM CURSOR -->
-<div class="custom-cursor" id="custom-cursor">🌸</div>
-<div class="cursor-trail" id="cursor-trail"></div>
-
 <!-- SCROLL PROGRESS -->
 <div id="scroll-progress"></div>
 
@@ -593,12 +589,6 @@ nav a:hover { color: var(--rose-light) !important; }
 
 <!-- LOADER -->
 <div id="loader">
-  <div class="loader-petals">
-    <span class="loader-petal" style="top:20%;left:15%;animation-delay:0s">🌸</span>
-    <span class="loader-petal" style="top:60%;left:80%;animation-delay:0.5s">🌺</span>
-    <span class="loader-petal" style="top:80%;left:25%;animation-delay:1s">✿</span>
-    <span class="loader-petal" style="top:30%;left:75%;animation-delay:1.5s">🌸</span>
-  </div>
   <div class="loader-flower">🌸</div>
   <div class="loader-logo">Flora</div>
   <div class="loader-sub">Store ✦</div>
@@ -1273,7 +1263,6 @@ window.addEventListener('load', () => {
   }, 600);
   loadFromCloud();
   initReveal();
-  initCursor();
   initScrollProgress();
   initParticles();
   initCounters();
@@ -1282,9 +1271,9 @@ window.addEventListener('load', () => {
 // ===== PETALS =====
 function createPetals() {
   const c = document.getElementById('petals');
-  const symbols = ['🌸','🌺','✿','❀','🌷','🌸','✦','🌸','❀','🌺','🌸','✿'];
+  const symbols = ['🌸','🌺','✿','❀','🌷','✦'];
   symbols.forEach((sym) => {
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 3; i++) {
       const p = document.createElement('div');
       p.className = 'petal';
       p.textContent = sym;
@@ -1295,29 +1284,6 @@ function createPetals() {
       p.style.cssText = `left:${left}%;font-size:${size}rem;animation-duration:${duration}s;animation-delay:${delay}s;`;
       c.appendChild(p);
     }
-  });
-}
-
-// ===== CUSTOM CURSOR =====
-function initCursor() {
-  const cursor = document.getElementById('custom-cursor');
-  const trail = document.getElementById('cursor-trail');
-  if (!cursor || window.innerWidth <= 768) return;
-  let trailX = 0, trailY = 0;
-  document.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-    trailX += (e.clientX - trailX) * 0.15;
-    trailY += (e.clientY - trailY) * 0.15;
-    trail.style.left = trailX + 'px';
-    trail.style.top = trailY + 'px';
-  });
-  document.addEventListener('mousedown', () => cursor.classList.add('clicking'));
-  document.addEventListener('mouseup', () => cursor.classList.remove('clicking'));
-  // Change cursor on interactive elements
-  document.querySelectorAll('a, button, .product-card, .cat-card').forEach(el => {
-    el.addEventListener('mouseenter', () => { cursor.textContent = '✨'; cursor.style.transform = 'translate(-50%,-50%) scale(1.3)'; });
-    el.addEventListener('mouseleave', () => { cursor.textContent = '🌸'; cursor.style.transform = 'translate(-50%,-50%) scale(1)'; });
   });
 }
 
@@ -1339,7 +1305,7 @@ function initParticles() {
   const container = document.getElementById('particles-container');
   if (!container) return;
   const colors = ['rgba(201,123,132,0.6)','rgba(232,180,187,0.5)','rgba(201,169,110,0.4)','rgba(168,92,102,0.5)'];
-  for (let i = 0; i < 25; i++) {
+  for (let i = 0; i < 8; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
     const size = 2 + Math.random() * 5;
