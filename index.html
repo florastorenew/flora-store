@@ -43,19 +43,24 @@ body { font-family: 'Tajawal', sans-serif; background: linear-gradient(to bottom
 
 /* LOADER */
 #loader { position:fixed; inset:0; z-index:9999; background:linear-gradient(135deg,#2a1a1e,#3d1a20,#6b2535); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:1.5rem; transition:opacity 0.8s ease; }
-#loader .loader-flower { font-size:4rem; animation:flowerSpin 2s ease-in-out infinite; filter:drop-shadow(0 0 20px rgba(201,123,132,0.6)); }
+
 #loader .loader-logo { font-family:'Cormorant Garamond',serif; font-size:3.5rem; font-style:italic; color:#fff; letter-spacing:8px; animation:loaderFadeIn 0.8s ease forwards; opacity:0; }
 #loader .loader-sub { font-size:0.7rem; letter-spacing:6px; color:var(--rose-light); text-transform:uppercase; animation:loaderFadeIn 1s 0.3s ease forwards; opacity:0; }
 #loader .loader-bar { width:150px; height:2px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden; margin-top:0.5rem; }
 #loader .loader-fill { height:100%; background:linear-gradient(90deg,var(--rose),var(--gold),var(--rose)); background-size:200% 100%; border-radius:2px; animation:load 1.5s ease forwards, shimmerLoad 1.5s linear infinite; }
-#loader .loader-petals { position:absolute; inset:0; pointer-events:none; }
-#loader .loader-petal { position:absolute; font-size:1.2rem; animation:loaderPetal 2s ease-in-out infinite; opacity:0.3; }
-@keyframes flowerSpin { 0%,100%{transform:rotate(0deg) scale(1)} 50%{transform:rotate(180deg) scale(1.1)} }
+
+
+
 @keyframes loaderFadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 @keyframes load { from{width:0} to{width:100%} }
 @keyframes shimmerLoad { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-@keyframes loaderPetal { 0%,100%{opacity:0.1;transform:translateY(0) rotate(0deg)} 50%{opacity:0.4;transform:translateY(-20px) rotate(180deg)} }
+
 @keyframes pulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
+
+/* PETALS */
+.petals-wrap { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:0; }
+.petal { position:absolute; opacity:0; animation:floatPetal linear infinite; pointer-events:none; font-style:normal; }
+@keyframes floatPetal { 0%{transform:translateY(110%) rotate(0deg);opacity:0} 8%{opacity:0.18} 92%{opacity:0.08} 100%{transform:translateY(-10%) rotate(360deg);opacity:0} }
 
 /* HEADER */
 header { position:fixed; top:0; left:0; right:0; z-index:1001; padding:0 3rem; background:rgba(253,246,240,0.93); border-bottom:1px solid rgba(201,123,132,0.12); display:flex; align-items:center; justify-content:space-between; height:75px; transition:box-shadow 0.3s; }
@@ -81,9 +86,8 @@ nav a:hover::after { width:100%; }
 /* HERO */
 .hero { min-height:100vh; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; padding-top:75px; }
 .hero-bg { position:absolute; inset:0; background: radial-gradient(ellipse 80% 80% at 20% 50%,rgba(253,246,240,0.6) 0%,transparent 70%); }
-.hero-petals { position:fixed; top:75px; left:0; right:0; bottom:0; pointer-events:none; z-index:0; overflow:hidden; }
-.petal { position:fixed; opacity:0.18; animation:floatPetal linear infinite; z-index:0; }
-@keyframes floatPetal { 0%{transform:translateY(100vh) rotate(0deg);opacity:0} 10%{opacity:0.15} 90%{opacity:0.08} 100%{transform:translateY(-20vh) rotate(360deg);opacity:0} }
+.hero-petals { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:0; }
+
 .hero-content { text-align:center; z-index:1; padding:2rem; animation:heroIn 1s ease forwards; }
 @keyframes heroIn { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
 .hero-badge { display:inline-flex; align-items:center; gap:0.5rem; padding:0.4rem 1.2rem; border:1px solid var(--rose-light); border-radius:30px; font-size:0.75rem; letter-spacing:3px; color:var(--rose); text-transform:uppercase; margin-bottom:1.5rem; background:rgba(255,255,255,0.6); }
@@ -553,11 +557,21 @@ nav a:hover { color: var(--rose-light) !important; }
 
 
 /* ===== ENHANCED PETALS ===== */
-.petal { position:fixed; opacity:0; animation:floatPetal linear infinite; z-index:0; will-change:transform; }
 
  to{opacity:1;transform:scale(1) translateY(0)} }
 
 
+
+
+/* PETALS - inside page only */
+.petals-wrap { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:0; }
+.petal { position:absolute; opacity:0; animation:floatPetal linear infinite; pointer-events:none; font-style:normal; }
+@keyframes floatPetal { 
+  0%   { transform:translateY(110%) rotate(0deg); opacity:0; }
+  10%  { opacity:0.18; }
+  90%  { opacity:0.08; }
+  100% { transform:translateY(-10%) rotate(360deg); opacity:0; }
+}
 
 </style>
 </head>
@@ -566,7 +580,6 @@ nav a:hover { color: var(--rose-light) !important; }
 
 <!-- LOADER -->
 <div id="loader">
-  <div class="loader-flower">🌸</div>
   <div class="loader-logo">Flora</div>
   <div class="loader-sub">Store ✦</div>
   <div class="loader-bar"><div class="loader-fill"></div></div>
@@ -619,11 +632,10 @@ nav a:hover { color: var(--rose-light) !important; }
   </div>
 </header>
 
-  <div class="hero-petals" id="petals"></div>
-
 <!-- HERO -->
 <section class="hero" id="home">
   <div class="hero-bg"></div>
+  <div class="petals-wrap" id="petals"></div>
   <div class="hero-content">
     <div class="hero-badge">✦ كوليكشن جديد ✦</div>
     <h1>اكتشفي <em>Flora</em></h1>
@@ -1249,17 +1261,26 @@ window.addEventListener('load', () => {
 });
 
 // ===== PETALS =====
+  });
+}
+
+
+  });
+}
+
+
 function createPetals() {
   const c = document.getElementById('petals');
+  if (!c) return;
   const symbols = ['🌸','🌺','✿','❀','🌷','✦'];
-  symbols.forEach((sym) => {
-    for (let i = 0; i < 3; i++) {
-      const p = document.createElement('div');
+  symbols.forEach(sym => {
+    for (let i = 0; i < 4; i++) {
+      const p = document.createElement('span');
       p.className = 'petal';
       p.textContent = sym;
-      const size = 0.5 + Math.random() * 1.8;
-      const duration = 8 + Math.random() * 20;
-      const delay = Math.random() * 20;
+      const size = 0.6 + Math.random() * 1.4;
+      const duration = 10 + Math.random() * 18;
+      const delay = Math.random() * 15;
       const left = Math.random() * 100;
       p.style.cssText = `left:${left}%;font-size:${size}rem;animation-duration:${duration}s;animation-delay:${delay}s;`;
       c.appendChild(p);
@@ -1608,6 +1629,7 @@ function sendWhatsAppOrder() {
   renderProducts(products);
   cart = [];
   saveCart();
+  createPetals();
   updateCartCount();
   renderCart();
   closeCart();
