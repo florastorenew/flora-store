@@ -542,49 +542,27 @@ nav a:hover { color: var(--rose-light) !important; }
 .cursor-trail { position:fixed; width:8px; height:8px; background:rgba(201,123,132,0.4); border-radius:50%; pointer-events:none; z-index:99998; transform:translate(-50%,-50%); transition:all 0.1s ease; }
 @media(max-width:768px) { *, *::before, *::after { cursor: auto !important; } .custom-cursor, .cursor-trail { display:none !important; } }
 
-/* ===== SCROLL PROGRESS BAR ===== */
-#scroll-progress { position:fixed; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--rose-deep),var(--rose),var(--gold),var(--rose)); background-size:200% 100%; z-index:9999; transform-origin:right; transform:scaleX(0); transition:transform 0.1s linear; animation:progressShimmer 2s linear infinite; }
-@keyframes progressShimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+ 100%{background-position:-200% 0} }
 
-/* ===== PARTICLES ===== */
-#particles-container { position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden; }
-.particle { position:absolute; border-radius:50%; pointer-events:none; animation:particleFloat linear infinite; opacity:0; will-change:transform; }
-@keyframes particleFloat { 0%{transform:translateY(100vh) rotate(0deg);opacity:0} 10%{opacity:0.6} 90%{opacity:0.2} 100%{transform:translateY(-10vh) rotate(720deg);opacity:0} }
+ 10%{opacity:0.6} 90%{opacity:0.2} 100%{transform:translateY(-10vh) rotate(720deg);opacity:0} }
 
-/* ===== GLASSMORPHISM CARDS ===== */
-.product-card { background:rgba(255,255,255,0.1) !important; border:1px solid rgba(255,255,255,0.18) !important; backdrop-filter:blur(6px) !important; -webkit-backdrop-filter:blur(6px) !important; box-shadow:0 8px 32px rgba(168,92,102,0.2) !important; border-radius:20px; overflow:hidden; transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position:relative; cursor:pointer; }
-.product-card:hover { transform:translateY(-12px) scale(1.02) !important; box-shadow:0 25px 60px rgba(168,92,102,0.4) !important; border-color:rgba(201,123,132,0.5) !important; }
-.product-card::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.05),transparent); pointer-events:none; z-index:1; }
 
-/* ===== GRADIENT TEXT ===== */
-.gradient-text { background:linear-gradient(135deg,#fff 0%,var(--rose-light) 40%,var(--gold) 70%,var(--rose-light) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; background-size:200% auto; animation:gradientShift 3s ease infinite; }
-@keyframes gradientShift { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
 
-/* ===== ENHANCED BADGES ===== */
-.product-badge { position:absolute; top:0; right:0; padding:0.4rem 1rem 0.4rem 1.2rem; font-size:0.7rem; font-weight:800; letter-spacing:1px; color:#fff; clip-path:polygon(0 0,100% 0,100% 100%,8% 100%); text-transform:uppercase; z-index:3; }
-.badge-new { background:linear-gradient(135deg,#e74c3c,#c0392b); }
-.badge-hot { background:linear-gradient(135deg,#f39c12,#e67e22); }
-.badge-special { background:linear-gradient(135deg,var(--rose),var(--rose-deep)); }
-.badge-bestseller { background:linear-gradient(135deg,var(--gold),#a0784a); }
+ 50%{background-position:100% 50%} }
+
+
 
 /* ===== ENHANCED PETALS ===== */
 .petal { position:fixed; opacity:0; animation:floatPetal linear infinite; z-index:0; will-change:transform; }
 
-/* ===== MODAL ENTRANCE ===== */
-.modal-overlay.open .modal-box { animation:modalEntrance 0.5s cubic-bezier(0.175,0.885,0.32,1.275) forwards; }
-@keyframes modalEntrance { from{opacity:0;transform:scale(0.85) translateY(30px)} to{opacity:1;transform:scale(1) translateY(0)} }
+ to{opacity:1;transform:scale(1) translateY(0)} }
 
-/* ===== COUNTER ANIMATION ===== */
-.stat-num { transition:all 0.3s ease; }
+
 
 </style>
 </head>
 <body>
-<!-- SCROLL PROGRESS -->
-<div id="scroll-progress"></div>
 
-<!-- PARTICLES -->
-<div id="particles-container"></div>
 
 <!-- LOADER -->
 <div id="loader">
@@ -648,7 +626,7 @@ nav a:hover { color: var(--rose-light) !important; }
   <div class="hero-bg"></div>
   <div class="hero-content">
     <div class="hero-badge">✦ كوليكشن جديد ✦</div>
-    <h1>اكتشفي <em class="gradient-text">Flora</em></h1>
+    <h1>اكتشفي <em>Flora</em></h1>
     <p class="hero-desc">كل إكسسوار، كل تفصيلة، كل هدية — مصممة خصيصاً لتعكس أناقتك وروحك الرقيقة 🌸</p>
     <div class="hero-actions">
       <a href="#products" class="btn-primary"><i class="fas fa-star"></i> تسوقي الآن</a>
@@ -746,7 +724,7 @@ nav a:hover { color: var(--rose-light) !important; }
       <p class="about-desc">Flora بدأت من حب حقيقي للتفاصيل الجميلة 🌸<br>بنؤمن إن كل بنت تستاهل إكسسوار يعكس روحها وأناقتها — من ميداليات وساعات أنيقة لبوكسات هدايا مصممة بحب.</p>
       <div class="about-stats">
         <div class="stat-item">
-          <span class="stat-num" id="stat-products" data-target="0">0</span>
+          <span class="stat-num" id="stat-products">0</span>
           <span class="stat-label">منتج مميز</span>
         </div>
         <div class="stat-item">
@@ -1225,7 +1203,7 @@ function updateCatCounts() {
   });
   // update stat in about section
   const statEl = document.getElementById('stat-products');
-  if (statEl) { statEl.setAttribute("data-target", products.length); animateCounter(statEl, products.length); }
+  if (statEl) statEl.textContent = products.length;
 }
 
 // ===== DATA =====
@@ -1262,9 +1240,6 @@ window.addEventListener('load', () => {
   }, 600);
   loadFromCloud();
   initReveal();
-  initScrollProgress();
-  initParticles();
-  initCounters();
 });
 
 // ===== PETALS =====
@@ -1286,71 +1261,7 @@ function createPetals() {
   });
 }
 
-// ===== SCROLL PROGRESS BAR =====
-function initScrollProgress() {
-  const bar = document.getElementById('scroll-progress');
-  if (!bar) return;
-  window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY;
-    const total = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = total > 0 ? scrolled / total : 0;
-    bar.style.transform = `scaleX(${progress})`;
-    bar.style.transformOrigin = 'left';
-  }, { passive: true });
-}
-
-// ===== PARTICLES =====
-function initParticles() {
-  const container = document.getElementById('particles-container');
-  if (!container) return;
-  const colors = ['rgba(201,123,132,0.6)','rgba(232,180,187,0.5)','rgba(201,169,110,0.4)','rgba(168,92,102,0.5)'];
-  for (let i = 0; i < 8; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    const size = 2 + Math.random() * 5;
-    p.style.cssText = `
-      width:${size}px; height:${size}px;
-      background:${colors[Math.floor(Math.random()*colors.length)]};
-      left:${Math.random()*100}%;
-      animation-duration:${12+Math.random()*20}s;
-      animation-delay:${Math.random()*15}s;
-    `;
-    container.appendChild(p);
-  }
-}
-
-// ===== COUNTER ANIMATION =====
-function animateCounter(el, target, duration=2000) {
-  if (!el) return;
-  const isNum = !isNaN(parseInt(target));
-  if (!isNum) return;
-  const end = parseInt(target);
-  const start = 0;
-  const startTime = performance.now();
-  function update(currentTime) {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const current = Math.floor(eased * (end - start) + start);
-    el.textContent = current;
-    if (progress < 1) requestAnimationFrame(update);
-    else el.textContent = target;
-  }
-  requestAnimationFrame(update);
-}
-
-function initCounters() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const el = e.target;
-        const target = el.getAttribute('data-target');
-        if (target) animateCounter(el, target);
-        observer.unobserve(el);
-      }
-    });
-  }, { threshold: 0.5 });
-  document.querySelectorAll('.stat-num[data-target]').forEach(el => observer.observe(el));
+// ===== NAV =====
 }
 
 // ===== NAV =====
@@ -1424,7 +1335,7 @@ function updateCatCounts() {
   });
   // update stat
   const statEl = document.getElementById('stat-products');
-  if (statEl) { statEl.setAttribute("data-target", products.length); animateCounter(statEl, products.length); }
+  if (statEl) statEl.textContent = products.length;
 }
 
 // ===== SCROLL REVEAL =====
@@ -1453,7 +1364,7 @@ function renderProducts(list) {
     <div class="product-card" style="animation:heroIn 0.5s ease ${i*0.06}s both">
       <div class="product-img-wrap">
         ${(p.img||p.image) ? `<img src="${p.img||p.image}" alt="${p.name}" loading="lazy">` : `<div class="product-no-img">${p.emoji || catEmoji[p.category] || '🌸'}</div>`}
-        ${p.badge ? `<div class="product-badge ${p.badge==='جديد'?'badge-new':p.badge==='الأكثر مبيعاً'?'badge-bestseller':p.badge==='عرض خاص'?'badge-special':p.badge==='أكثر مبيعاً'?'badge-bestseller':'badge-special'}">${p.badge}</div>` : ''}
+        ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
         ${p.outOfStock ? `<div class="oos-badge"><span>نفذت الكمية</span></div>` : `
         <div class="product-actions-overlay">
           <button class="overlay-btn" onclick="openModal('${p.id}');event.stopPropagation()" title="تفاصيل"><i class="fas fa-eye"></i></button>
