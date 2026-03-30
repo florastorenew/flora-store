@@ -1276,6 +1276,7 @@ window.addEventListener('load', () => {
 function createBgPetals() {
   const container = document.getElementById('bg-petals');
   if (!container) return;
+  container.innerHTML = '';
   const symbols = ['🌸','🌺','✿','❀','🌷','🌸','🌸','✿','❀'];
   symbols.forEach(sym => {
     for (let i = 0; i < 3; i++) {
@@ -1633,7 +1634,6 @@ function sendWhatsAppOrder() {
   renderProducts(products);
   cart = [];
   saveCart();
-  createBgPetals();
   updateCartCount();
   renderCart();
   closeCart();
