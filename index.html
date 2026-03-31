@@ -572,14 +572,17 @@ nav a:hover { color: var(--rose-light) !important; }
 
 
 /* ===== BACKGROUND PETALS ===== */
-#bg-petals { position:fixed; top:0; left:0; right:0; bottom:0; pointer-events:none; z-index:0; overflow:hidden; }
-.bg-petal { position:absolute; bottom:-50px; opacity:0; animation:bgPetalRise linear infinite; pointer-events:none; user-select:none; }
+#bg-petals { display:none; }
+.bg-petal { position:absolute; bottom:-80px; opacity:0; animation:bgPetalRise linear infinite; pointer-events:none; user-select:none; font-style:normal; }
 @keyframes bgPetalRise {
-  0%   { transform:translateY(0) rotate(0deg) scale(0.8); opacity:0; }
-  10%  { opacity:0.15; }
-  85%  { opacity:0.08; }
-  100% { transform:translateY(-110vh) rotate(360deg) scale(1); opacity:0; }
+  0%   { transform:translateY(0) rotate(0deg); opacity:0; }
+  8%   { opacity:0.2; }
+  88%  { opacity:0.1; }
+  100% { transform:translateY(-120vh) rotate(400deg); opacity:0; }
 }
+/* Each section gets petals overlay */
+.petal-section { position:relative; overflow:hidden; }
+.section-petals { position:absolute; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
 
 </style>
 </head>
@@ -663,7 +666,7 @@ nav a:hover { color: var(--rose-light) !important; }
 </section>
 
 <!-- CATEGORIES -->
-<section id="categories" class="reveal">
+<section id="categories" class="reveal petal-section">
   <div class="section-header">
     <span class="section-tag">✦ Shop by Category</span>
     <h2 class="section-title">Choose Your <em>Category</em></h2>
@@ -718,7 +721,7 @@ nav a:hover { color: var(--rose-light) !important; }
 </section>
 
 <!-- PRODUCTS -->
-<section id="products" class="reveal">
+<section id="products" class="reveal petal-section">
   <div class="section-header">
     <span class="section-tag">✦ كوليكشننا</span>
     <h2 class="section-title">المنتجات <em>المميزة</em></h2>
@@ -1274,20 +1277,47 @@ window.addEventListener('load', () => {
 
 // ===== BACKGROUND PETALS =====
 function createBgPetals() {
-  const container = document.getElementById('bg-petals');
-  if (!container) return;
-  container.innerHTML = '';
-  const symbols = ['🌸','🌺','✿','❀','🌷','🌸','🌸','✿','❀','🌺','🌸','✿'];
-  symbols.forEach((sym, idx) => {
-    for (let i = 0; i < 4; i++) {
-      const p = document.createElement('span');
-      p.className = 'bg-petal';
-      const size = 0.6 + Math.random() * 1.5;
-      const duration = 10 + Math.random() * 15;
-      const delay = (idx * 0.8 + i * 2.5) % 20;
-      const left = (idx * 8 + i * 22 + Math.random() * 10) % 100;
-      p.textContent = sym;
-      p.style.cssText = `left:${left}%;font-size:${size}rem;animation-duration:${duration}s;animation-delay:-${delay}s;`;
+  // Add petals to each section
+  const sections = document.querySelectorAll('.petal-section');
+  const symbols = ['🌸','🌺','✿','❀','🌷','🌸','✿'];
+  
+  sections.forEach(section => {
+    const wrap = document.createElement('div');
+    wrap.className = 'section-petals';
+    symbols.forEach((sym, idx) => {
+      for (let i = 0; i < 3; i++) {
+        const p = document.createElement('span');
+        p.className = 'bg-petal';
+        const size = 0.6 + Math.random() * 1.2;
+        const duration = 10 + Math.random() * 14;
+        const delay = -(Math.random() * 20);
+        const left = Math.random() * 100;
+        p.textContent = sym;
+        p.style.cssText = `left:${left}%;font-size:${size}rem;animation-duration:${duration}s;animation-delay:${delay}s;`;
+        wrap.appendChild(p);
+      }
+    });
+    section.appendChild(wrap);
+  });
+
+  // Also keep petals in hero
+  const heroPetals = document.getElementById('petals');
+  if (heroPetals) {
+    symbols.forEach((sym) => {
+      for (let i = 0; i < 4; i++) {
+        const p = document.createElement('span');
+        p.className = 'bg-petal';
+        const size = 0.6 + Math.random() * 1.4;
+        const duration = 10 + Math.random() * 15;
+        const delay = -(Math.random() * 20);
+        const left = Math.random() * 100;
+        p.textContent = sym;
+        p.style.cssText = `left:${left}%;font-size:${size}rem;animation-duration:${duration}s;animation-delay:${delay}s;`;
+        heroPetals.appendChild(p);
+      }
+    });
+  }
+}%;font-size:${size}rem;animation-duration:${duration}s;animation-delay:-${delay}s;`;
       container.appendChild(p);
     }
   });
