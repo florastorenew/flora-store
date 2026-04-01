@@ -250,6 +250,34 @@ section { padding:6rem 3rem; position:relative; background:transparent; }
   .back-top { bottom:1.5rem; right:1rem; }
 }
 
+/* BOTTOM NAV - mobile only */
+.bottom-nav { display:none; position:fixed; bottom:0; left:0; right:0; z-index:1200; background:linear-gradient(to top,#2a1a1e,#3d1a20); border-top:1px solid rgba(201,123,132,0.2); padding:0.5rem 0 calc(0.5rem + env(safe-area-inset-bottom)); }
+.bottom-nav-inner { display:flex; align-items:center; justify-content:space-around; }
+.bnav-btn { display:flex; flex-direction:column; align-items:center; gap:0.2rem; background:none; border:none; color:rgba(255,255,255,0.5); cursor:pointer; padding:0.4rem 1rem; transition:all 0.25s; position:relative; font-family:'Tajawal',sans-serif; }
+.bnav-btn i { font-size:1.2rem; transition:all 0.25s; }
+.bnav-btn span { font-size:0.6rem; letter-spacing:0.5px; }
+.bnav-btn.active { color:var(--rose-light); }
+.bnav-btn.active i { transform:translateY(-2px); }
+.bnav-cart-count { position:absolute; top:0.2rem; right:0.6rem; background:var(--rose); color:#fff; width:16px; height:16px; border-radius:50%; font-size:0.55rem; display:flex; align-items:center; justify-content:center; font-weight:700; }
+@media(max-width:768px) {
+  .bottom-nav { display:block; }
+  body { padding-bottom:70px; }
+}
+
+/* RIPPLE EFFECT */
+.ripple-host { position:relative; overflow:hidden; }
+.ripple { position:absolute; border-radius:50%; background:rgba(255,255,255,0.35); transform:scale(0); animation:rippleAnim 0.55s linear; pointer-events:none; }
+@keyframes rippleAnim { to { transform:scale(4); opacity:0; } }
+
+/* EMPTY STATE - improved */
+.empty-state { text-align:center; padding:3rem 1rem; grid-column:1/-1; }
+.empty-state-flower { font-size:4rem; animation:emptyFloat 3s ease-in-out infinite; display:block; margin-bottom:1rem; }
+@keyframes emptyFloat { 0%,100%{transform:translateY(0) rotate(-5deg)} 50%{transform:translateY(-12px) rotate(5deg)} }
+.empty-state-title { font-family:'Cormorant Garamond',serif; font-size:1.5rem; color:#fff; margin-bottom:0.5rem; }
+.empty-state-sub { font-size:0.85rem; color:rgba(255,255,255,0.5); margin-bottom:1.5rem; line-height:1.7; }
+.empty-state-btn { display:inline-flex; align-items:center; gap:0.5rem; padding:0.7rem 1.8rem; background:linear-gradient(135deg,var(--rose),var(--rose-deep)); color:#fff; border:none; border-radius:30px; font-family:'Tajawal',sans-serif; font-size:0.9rem; font-weight:600; cursor:pointer; transition:all 0.3s; box-shadow:0 6px 20px rgba(201,123,132,0.35); }
+.empty-state-btn:hover { transform:translateY(-3px); box-shadow:0 10px 30px rgba(201,123,132,0.45); }
+
 /* FOOTER */
 footer { background:transparent; color:rgba(255,255,255,0.7); padding:4rem 3rem 2rem; text-align:center; }
 .footer-logo { font-family:'Cormorant Garamond',serif; font-size:2.5rem; font-style:italic; color:var(--rose-light); letter-spacing:5px; margin-bottom:0.5rem; }
@@ -294,6 +322,44 @@ footer { background:transparent; color:rgba(255,255,255,0.7); padding:4rem 3rem 
 .cart-total-val { color:var(--rose-deep); font-size:1.2rem; }
 .whatsapp-order-btn { width:100%; padding:1rem; background:linear-gradient(135deg,#25d366,#128c7e); color:#fff; border:none; border-radius:14px; font-family:'Tajawal',sans-serif; font-size:1rem; font-weight:700; cursor:pointer; letter-spacing:1px; display:flex; align-items:center; justify-content:center; gap:0.7rem; transition:all 0.3s; box-shadow:0 6px 20px rgba(37,211,102,0.3); }
 .whatsapp-order-btn:hover { transform:translateY(-3px); box-shadow:0 10px 30px rgba(37,211,102,0.4); }
+
+/* PRODUCT PAGE */
+#product-page { position:fixed; inset:0; z-index:5000; background:linear-gradient(to bottom,#2a1a1e,#3d1a20,#6b2535,#a85c66); overflow-y:auto; transform:translateX(100%); transition:transform 0.4s cubic-bezier(0.4,0,0.2,1); -webkit-overflow-scrolling:touch; }
+#product-page.open { transform:translateX(0); }
+.pp-header { position:sticky; top:0; z-index:10; background:rgba(42,26,30,0.9); padding:1rem 1.5rem; display:flex; align-items:center; gap:1rem; border-bottom:1px solid rgba(201,123,132,0.15); }
+.pp-back { background:rgba(255,255,255,0.1); border:none; color:#fff; width:40px; height:40px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.1rem; transition:all 0.3s; flex-shrink:0; }
+.pp-back:hover { background:var(--rose); }
+.pp-header-title { font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:#fff; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pp-img-wrap { position:relative; aspect-ratio:1/1; overflow:hidden; background:rgba(255,255,255,0.05); }
+.pp-img-wrap img { width:100%; height:100%; object-fit:cover; }
+.pp-no-img { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:6rem; }
+.pp-body { padding:1.5rem; max-width:600px; margin:0 auto; }
+.pp-badge { display:inline-block; padding:0.3rem 1rem; background:linear-gradient(135deg,var(--rose),var(--rose-deep)); color:#fff; border-radius:20px; font-size:0.75rem; font-weight:700; margin-bottom:0.8rem; }
+.pp-name { font-family:'Cormorant Garamond',serif; font-size:2rem; color:#fff; line-height:1.2; margin-bottom:0.5rem; }
+.pp-price { font-size:1.8rem; font-weight:700; color:var(--rose-light); margin-bottom:1rem; }
+.pp-desc { color:rgba(255,255,255,0.7); line-height:1.9; font-size:0.95rem; margin-bottom:1.5rem; }
+.pp-divider { height:1px; background:rgba(255,255,255,0.08); margin:1.2rem 0; }
+.pp-qty-row { display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem; }
+.pp-qty-label { color:rgba(255,255,255,0.6); font-size:0.9rem; }
+.pp-qty-ctrl { display:flex; align-items:center; gap:0.8rem; background:rgba(255,255,255,0.08); border-radius:25px; padding:0.3rem 0.8rem; }
+.pp-qty-btn { background:none; border:none; color:var(--rose-light); font-size:1.3rem; cursor:pointer; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-weight:700; transition:all 0.2s; }
+.pp-qty-btn:hover { color:#fff; transform:scale(1.2); }
+.pp-qty-val { color:#fff; font-weight:700; font-size:1.1rem; min-width:24px; text-align:center; }
+.pp-add-btn { width:100%; padding:1.1rem; background:linear-gradient(135deg,var(--rose),var(--rose-deep)); color:#fff; border:none; border-radius:16px; font-family:'Tajawal',sans-serif; font-size:1.05rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:0.7rem; transition:all 0.3s; box-shadow:0 8px 25px rgba(201,123,132,0.4); margin-bottom:0.8rem; }
+.pp-add-btn:hover { transform:translateY(-2px); box-shadow:0 12px 35px rgba(201,123,132,0.5); }
+.pp-oos { width:100%; padding:1.1rem; background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.4); border:none; border-radius:16px; font-family:'Tajawal',sans-serif; font-size:1rem; text-align:center; margin-bottom:0.8rem; }
+.pp-related { margin-top:2rem; }
+.pp-related-title { color:rgba(255,255,255,0.5); font-size:0.85rem; font-weight:600; margin-bottom:1rem; }
+.pp-related-grid { display:flex; gap:0.8rem; overflow-x:auto; padding-bottom:0.5rem; }
+.pp-related-card { min-width:110px; cursor:pointer; flex-shrink:0; }
+.pp-related-img { width:110px; height:110px; border-radius:14px; overflow:hidden; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; margin-bottom:0.4rem; }
+.pp-related-img img { width:100%; height:100%; object-fit:cover; }
+.pp-related-name { font-size:0.75rem; color:#fff; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:110px; }
+.pp-related-price { font-size:0.75rem; color:var(--rose-light); font-weight:700; }
+.pp-colors { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.5rem; }
+.pp-color-btn { padding:0.4rem 1rem; border:1.5px solid rgba(255,255,255,0.2); border-radius:20px; background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.8); font-family:'Tajawal',sans-serif; font-size:0.85rem; cursor:pointer; transition:all 0.2s; }
+.pp-color-btn.selected { border-color:var(--rose-light); background:rgba(201,123,132,0.25); color:#fff; }
+.pp-oos-badge { position:absolute; bottom:1rem; right:1rem; background:rgba(230,126,34,0.9); color:#fff; padding:0.4rem 1rem; border-radius:20px; font-size:0.8rem; font-weight:700; }
 
 /* MODAL */
 .modal-overlay { position:fixed; inset:0; z-index:3000; background:rgba(0,0,0,0.6); opacity:0; pointer-events:none; transition:opacity 0.3s; display:flex; align-items:center; justify-content:center; padding:2rem; }
@@ -840,6 +906,29 @@ nav a:hover { color: var(--rose-light) !important; }
   </div>
 </section>
 
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav" id="bottom-nav">
+  <div class="bottom-nav-inner">
+    <button class="bnav-btn active" id="bnav-home" onclick="bnavGo('home')">
+      <i class="fas fa-home"></i>
+      <span>الرئيسية</span>
+    </button>
+    <button class="bnav-btn" id="bnav-products" onclick="bnavGo('products')">
+      <i class="fas fa-shopping-bag"></i>
+      <span>المنتجات</span>
+    </button>
+    <button class="bnav-btn" id="bnav-cart" onclick="toggleCart()">
+      <i class="fas fa-shopping-cart"></i>
+      <span>السلة</span>
+      <span class="bnav-cart-count" id="bnav-cart-count">0</span>
+    </button>
+    <button class="bnav-btn" id="bnav-social" onclick="bnavGo('social')">
+      <i class="fab fa-whatsapp"></i>
+      <span>تواصلي</span>
+    </button>
+  </div>
+</nav>
+
 <!-- FLOATING WHATSAPP -->
 <a href="https://wa.me/201147106979" target="_blank" class="float-wa" title="تواصلي معنا على واتساب">
   <i class="fab fa-whatsapp"></i>
@@ -931,6 +1020,42 @@ nav a:hover { color: var(--rose-light) !important; }
     <button class="whatsapp-order-btn" onclick="sendWhatsAppOrder()">
       <i class="fab fa-whatsapp"></i> أكملي الطلب عبر واتساب
     </button>
+  </div>
+</div>
+
+<!-- PRODUCT PAGE -->
+<div id="product-page">
+  <div class="pp-header">
+    <button class="pp-back" onclick="closeProductPage()" title="رجوع">
+      <i class="fas fa-arrow-right"></i>
+    </button>
+    <div class="pp-header-title" id="pp-header-title">تفاصيل المنتج</div>
+    <button class="cart-btn" onclick="toggleCart()" style="color:#fff;background:none;border:none;cursor:pointer;font-size:1.1rem;position:relative">
+      <i class="fas fa-shopping-bag"></i>
+      <span class="cart-count" id="pp-cart-count">0</span>
+    </button>
+  </div>
+  <div id="pp-img-wrap" class="pp-img-wrap"></div>
+  <div class="pp-body">
+    <div id="pp-badge-wrap"></div>
+    <div class="pp-name" id="pp-name"></div>
+    <div class="pp-price" id="pp-price"></div>
+    <div class="pp-desc" id="pp-desc"></div>
+    <div id="pp-colors-wrap" class="pp-colors"></div>
+    <div class="pp-divider"></div>
+    <div class="pp-qty-row">
+      <span class="pp-qty-label">الكمية:</span>
+      <div class="pp-qty-ctrl">
+        <button class="pp-qty-btn" onclick="changePPQty(-1)">−</button>
+        <span class="pp-qty-val" id="pp-qty">1</span>
+        <button class="pp-qty-btn" onclick="changePPQty(1)">+</button>
+      </div>
+    </div>
+    <div id="pp-add-wrap"></div>
+    <div class="pp-related" id="pp-related" style="display:none">
+      <div class="pp-related-title">✨ منتجات مشابهة</div>
+      <div class="pp-related-grid" id="pp-related-grid"></div>
+    </div>
   </div>
 </div>
 
@@ -1272,6 +1397,9 @@ window.addEventListener('load', () => {
   }, 600);
   loadFromCloud();
   initReveal();
+  initRipple();
+  updateBnavCart();
+  checkHashOnLoad();
 });
 
 
@@ -1412,21 +1540,25 @@ function renderProducts(list) {
   const grid = document.getElementById('products-grid');
   document.getElementById('filter-count').textContent = list.length ? `عرض ${list.length} منتج` : '';
   if (!list.length) {
-    grid.innerHTML = `<div class="empty-state"><i class="fas fa-box-open"></i><p>لا توجد منتجات في هذه الفئة حالياً 🌸<br><small>سيتم الإضافة قريباً</small></p></div>`;
+    grid.innerHTML = `
+      <div class="empty-state">
+        <span class="empty-state-flower">🌸</span>
+        <div class="empty-state-title">مفيش منتجات هنا دلوقتي</div>
+        <div class="empty-state-sub">الكوليكشن الجديد هيوصل قريباً 💕<br>جربي كاتيجوري تانية أو ارجعي بعدين!</div>
+        <button class="empty-state-btn" onclick="filterCategory('all', document.querySelector('.cat-card'))">
+          <i class="fas fa-th-large"></i> شوفي الكل
+        </button>
+      </div>`;
     return;
   }
   grid.innerHTML = list.map((p, i) => `
-    <div class="product-card" style="animation:heroIn 0.5s ease ${i*0.06}s both">
+    <div class="product-card" style="animation:heroIn 0.5s ease ${i*0.06}s both" onclick="openProductPage('${p.id}')">
       <div class="product-img-wrap">
         ${(p.img||p.image) ? `<img src="${p.img||p.image}" alt="${p.name}" loading="lazy">` : `<div class="product-no-img">${p.emoji || catEmoji[p.category] || '🌸'}</div>`}
         ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
-        ${p.outOfStock ? `<div class="oos-badge"><span>نفذت الكمية</span></div>` : `
-        <div class="product-actions-overlay">
-          <button class="overlay-btn" onclick="openModal('${p.id}');event.stopPropagation()" title="تفاصيل"><i class="fas fa-eye"></i></button>
-          <button class="overlay-btn" onclick="addToCart('${p.id}');event.stopPropagation()" title="أضيفي للسلة"><i class="fas fa-shopping-bag"></i></button>
-        </div>`}
+        ${p.outOfStock ? `<div class="oos-badge"><span>نفذت الكمية</span></div>` : ''}
       </div>
-      <div class="product-info" onclick="openModal('${p.id}')">
+      <div class="product-info">
         <div class="product-name">
           ${p.name}
           ${p.colors && p.colors.length > 0 ? `<span style="display:inline-flex;gap:3px;margin-right:4px;vertical-align:middle">${p.colors.map(c => `<span title="${c.name}" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${c.soldOut?'#ccc':getColorHex(c.name)};border:1px solid rgba(0,0,0,0.15);opacity:${c.soldOut?0.4:1}"></span>`).join('')}</span>` : ''}
@@ -1461,7 +1593,9 @@ function sortProducts(val) {
 function saveCart() { localStorage.setItem('flora_cart', JSON.stringify(cart)); }
 
 function updateCartCount() {
-  document.getElementById('cart-count').textContent = cart.reduce((a,b) => a+b.qty, 0);
+  const count = cart.reduce((a,b) => a+b.qty, 0);
+  document.getElementById('cart-count').textContent = count;
+  updateBnavCart();
 }
 
 function addToCart(id, selectedColor) {
@@ -2273,6 +2407,215 @@ function saveSettings() {
 // ===== SECRET ADMIN TRIGGER =====
 let secretClicks = 0;
 let secretTimer = null;
+// ===== BOTTOM NAV =====
+function bnavGo(section) {
+  document.getElementById(section).scrollIntoView({ behavior: 'smooth' });
+  document.querySelectorAll('.bnav-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('bnav-' + section);
+  if (btn) btn.classList.add('active');
+}
+
+function updateBnavCart() {
+  const count = cart.reduce((a, b) => a + b.qty, 0);
+  const el = document.getElementById('bnav-cart-count');
+  if (el) { el.textContent = count; el.style.display = count > 0 ? 'flex' : 'none'; }
+}
+
+// Update bnav active state on scroll
+window.addEventListener('scroll', () => {
+  const sections = ['home','products','about','social'];
+  let current = 'home';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 120) current = id;
+  });
+  document.querySelectorAll('.bnav-btn').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.getElementById('bnav-' + current);
+  if (activeBtn) activeBtn.classList.add('active');
+}, { passive: true });
+
+// ===== RIPPLE EFFECT =====
+function addRipple(e) {
+  const btn = e.currentTarget;
+  if (!btn.classList.contains('ripple-host')) btn.classList.add('ripple-host');
+  const circle = document.createElement('span');
+  const diameter = Math.max(btn.clientWidth, btn.clientHeight);
+  const radius = diameter / 2;
+  const rect = btn.getBoundingClientRect();
+  circle.className = 'ripple';
+  circle.style.cssText = `width:${diameter}px;height:${diameter}px;left:${e.clientX - rect.left - radius}px;top:${e.clientY - rect.top - radius}px;`;
+  const old = btn.querySelector('.ripple');
+  if (old) old.remove();
+  btn.appendChild(circle);
+}
+
+function initRipple() {
+  const selectors = '.btn-primary, .btn-secondary, .add-cart-btn, .whatsapp-order-btn, .admin-submit, .bnav-btn';
+  document.querySelectorAll(selectors).forEach(btn => {
+    btn.addEventListener('click', addRipple);
+  });
+}
+
+// ===== PRODUCT PAGE =====
+let ppSelectedColor = null;
+
+function openProductPage(id) {
+  const p = products.find(x => String(x.id) === String(id));
+  if (!p) return;
+  ppSelectedColor = null;
+
+  // Update URL hash
+  history.pushState({ productId: id }, '', `#product-${id}`);
+
+  // Header title
+  document.getElementById('pp-header-title').textContent = p.name;
+  document.getElementById('pp-name').textContent = p.name;
+  document.getElementById('pp-price').textContent = `${p.price.toLocaleString()} جنيه`;
+  document.getElementById('pp-desc').textContent = p.desc || p.description || 'منتج مميز من فلورا ستور 🌸';
+  document.getElementById('pp-qty').textContent = '1';
+
+  // Cart count sync
+  const ppCount = document.getElementById('pp-cart-count');
+  if (ppCount) ppCount.textContent = cart.reduce((a,b) => a+b.qty, 0);
+
+  // Badge
+  const badgeWrap = document.getElementById('pp-badge-wrap');
+  badgeWrap.innerHTML = p.badge ? `<div class="pp-badge">${p.badge}</div>` : '';
+
+  // Image
+  const allImgs = (p.images && p.images.length > 0) ? p.images : (p.img||p.image ? [p.img||p.image] : []);
+  const imgWrap = document.getElementById('pp-img-wrap');
+  if (allImgs.length > 1) {
+    imgWrap.innerHTML = `
+      <div style="position:relative;overflow:hidden">
+        <div id="pp-slider-track" style="display:flex;transition:transform 0.35s ease">
+          ${allImgs.map(u => `<img src="${u}" style="min-width:100%;width:100%;aspect-ratio:1/1;object-fit:cover">`).join('')}
+        </div>
+        <button onclick="slidePP(-1)" style="position:absolute;top:50%;right:12px;transform:translateY(-50%);background:rgba(42,26,30,0.7);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center">‹</button>
+        <button onclick="slidePP(1)" style="position:absolute;top:50%;left:12px;transform:translateY(-50%);background:rgba(42,26,30,0.7);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center">›</button>
+        <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px">
+          ${allImgs.map((_,i) => `<div class="pp-dot" id="pp-dot-${i}" style="width:7px;height:7px;border-radius:50%;background:${i===0?'#fff':'rgba(255,255,255,0.4)'};cursor:pointer;transition:all 0.2s" onclick="goToPPSlide(${i})"></div>`).join('')}
+        </div>
+      </div>`;
+    window._ppSliderIdx = 0;
+    window._ppSliderTotal = allImgs.length;
+  } else if (allImgs.length === 1) {
+    imgWrap.innerHTML = `<img src="${allImgs[0]}" alt="${p.name}" style="width:100%;aspect-ratio:1/1;object-fit:cover">`;
+  } else {
+    imgWrap.innerHTML = `<div class="pp-no-img">${p.emoji || catEmoji[p.category] || '🌸'}</div>`;
+  }
+  if (p.outOfStock) {
+    imgWrap.innerHTML += `<div class="pp-oos-badge">نفذت الكمية</div>`;
+  }
+
+  // Colors
+  const colorsWrap = document.getElementById('pp-colors-wrap');
+  const availColors = (p.colors || []).filter(c => !c.soldOut);
+  if (availColors.length > 0 && !p.outOfStock) {
+    colorsWrap.innerHTML = `<div style="color:rgba(255,255,255,0.6);font-size:0.85rem;margin-bottom:0.5rem;width:100%">🎨 اختاري اللون:</div>` +
+      availColors.map(c => `<button class="pp-color-btn" onclick="selectPPColor('${c.name}', this)">${c.name}</button>`).join('');
+  } else {
+    colorsWrap.innerHTML = '';
+  }
+
+  // Add button
+  const addWrap = document.getElementById('pp-add-wrap');
+  if (p.outOfStock || p.stock === 0) {
+    addWrap.innerHTML = `<div class="pp-oos">😔 نفذت الكمية</div>`;
+  } else {
+    addWrap.innerHTML = `<button class="pp-add-btn ripple-host" onclick="addToPPCart('${p.id}')"><i class="fas fa-shopping-bag"></i> أضيفي للسلة</button>`;
+    document.querySelectorAll('.pp-add-btn').forEach(btn => btn.addEventListener('click', addRipple));
+  }
+
+  // Related products
+  const related = products.filter(x => x.category === p.category && String(x.id) !== String(id) && !x.outOfStock).slice(0,6);
+  const relWrap = document.getElementById('pp-related');
+  const relGrid = document.getElementById('pp-related-grid');
+  if (related.length > 0) {
+    relWrap.style.display = 'block';
+    relGrid.innerHTML = related.map(r => `
+      <div class="pp-related-card" onclick="openProductPage('${r.id}')">
+        <div class="pp-related-img">
+          ${(r.img||r.image) ? `<img src="${r.img||r.image}" alt="${r.name}">` : `<span style="font-size:2rem">${r.emoji||catEmoji[r.category]||'🌸'}</span>`}
+        </div>
+        <div class="pp-related-name">${r.name}</div>
+        <div class="pp-related-price">${r.price.toLocaleString()} جم</div>
+      </div>`).join('');
+  } else {
+    relWrap.style.display = 'none';
+  }
+
+  // Scroll to top and open
+  document.getElementById('product-page').scrollTop = 0;
+  document.getElementById('product-page').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProductPage() {
+  document.getElementById('product-page').classList.remove('open');
+  document.body.style.overflow = '';
+  history.back();
+}
+
+function changePPQty(d) {
+  const el = document.getElementById('pp-qty');
+  el.textContent = Math.max(1, (parseInt(el.textContent) || 1) + d);
+}
+
+function selectPPColor(name, btn) {
+  ppSelectedColor = name;
+  document.querySelectorAll('.pp-color-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function addToPPCart(id) {
+  const p = products.find(x => String(x.id) === String(id));
+  if (!p) return;
+  const availColors = (p.colors || []).filter(c => !c.soldOut);
+  if (availColors.length > 0 && !ppSelectedColor) {
+    showToast('⚠️ اختاري اللون الأول!', 'warning');
+    return;
+  }
+  const qty = parseInt(document.getElementById('pp-qty').textContent) || 1;
+  for (let i = 0; i < qty; i++) addToCart(id, ppSelectedColor);
+  showToast(`✅ اتضافت للسلة 🌸`, 'happy');
+}
+
+function slidePP(dir) {
+  const total = window._ppSliderTotal || 1;
+  window._ppSliderIdx = (window._ppSliderIdx + dir + total) % total;
+  goToPPSlide(window._ppSliderIdx);
+}
+
+function goToPPSlide(i) {
+  window._ppSliderIdx = i;
+  const track = document.getElementById('pp-slider-track');
+  if (track) track.style.transform = `translateX(${i * 100}%)`;
+  document.querySelectorAll('.pp-dot').forEach((d, idx) => {
+    d.style.background = idx === i ? '#fff' : 'rgba(255,255,255,0.4)';
+  });
+}
+
+// Handle browser back button
+window.addEventListener('popstate', (e) => {
+  const page = document.getElementById('product-page');
+  if (page.classList.contains('open')) {
+    page.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
+
+// Handle direct URL with hash
+function checkHashOnLoad() {
+  const hash = window.location.hash;
+  if (hash.startsWith('#product-')) {
+    const id = hash.replace('#product-', '');
+    setTimeout(() => {
+      if (products.length > 0) openProductPage(id);
+    }, 1000);
+  }
+}
+
 function secretClick() {
   secretClicks++;
   clearTimeout(secretTimer);
