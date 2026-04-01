@@ -334,6 +334,14 @@ footer { background:transparent; color:rgba(255,255,255,0.7); padding:4rem 3rem 
 .pp-img-wrap img { width:100%; height:100%; object-fit:cover; }
 .pp-no-img { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:6rem; }
 .pp-body { padding:1.5rem; max-width:600px; margin:0 auto; }
+
+/* Desktop layout */
+@media(min-width:769px) {
+  #product-page { overflow-y:auto; }
+  .pp-desktop-wrap { display:grid; grid-template-columns:1fr 1fr; gap:3rem; max-width:1000px; margin:2rem auto; padding:0 2rem; align-items:start; }
+  .pp-img-wrap { border-radius:20px; aspect-ratio:1/1; max-height:480px; }
+  .pp-body { padding:0; max-width:none; margin:0; }
+}
 .pp-badge { display:inline-block; padding:0.3rem 1rem; background:linear-gradient(135deg,var(--rose),var(--rose-deep)); color:#fff; border-radius:20px; font-size:0.75rem; font-weight:700; margin-bottom:0.8rem; }
 .pp-name { font-family:'Cormorant Garamond',serif; font-size:2rem; color:#fff; line-height:1.2; margin-bottom:0.5rem; }
 .pp-price { font-size:1.8rem; font-weight:700; color:var(--rose-light); margin-bottom:1rem; }
@@ -1035,26 +1043,28 @@ nav a:hover { color: var(--rose-light) !important; }
       <span class="cart-count" id="pp-cart-count">0</span>
     </button>
   </div>
-  <div id="pp-img-wrap" class="pp-img-wrap"></div>
-  <div class="pp-body">
-    <div id="pp-badge-wrap"></div>
-    <div class="pp-name" id="pp-name"></div>
-    <div class="pp-price" id="pp-price"></div>
-    <div class="pp-desc" id="pp-desc"></div>
-    <div id="pp-colors-wrap" class="pp-colors"></div>
-    <div class="pp-divider"></div>
-    <div class="pp-qty-row">
-      <span class="pp-qty-label">الكمية:</span>
-      <div class="pp-qty-ctrl">
-        <button class="pp-qty-btn" onclick="changePPQty(-1)">−</button>
-        <span class="pp-qty-val" id="pp-qty">1</span>
-        <button class="pp-qty-btn" onclick="changePPQty(1)">+</button>
+  <div class="pp-desktop-wrap">
+    <div id="pp-img-wrap" class="pp-img-wrap"></div>
+    <div class="pp-body">
+      <div id="pp-badge-wrap"></div>
+      <div class="pp-name" id="pp-name"></div>
+      <div class="pp-price" id="pp-price"></div>
+      <div class="pp-desc" id="pp-desc"></div>
+      <div id="pp-colors-wrap" class="pp-colors"></div>
+      <div class="pp-divider"></div>
+      <div class="pp-qty-row">
+        <span class="pp-qty-label">الكمية:</span>
+        <div class="pp-qty-ctrl">
+          <button class="pp-qty-btn" onclick="changePPQty(-1)">−</button>
+          <span class="pp-qty-val" id="pp-qty">1</span>
+          <button class="pp-qty-btn" onclick="changePPQty(1)">+</button>
+        </div>
       </div>
-    </div>
-    <div id="pp-add-wrap"></div>
-    <div class="pp-related" id="pp-related" style="display:none">
-      <div class="pp-related-title">✨ منتجات مشابهة</div>
-      <div class="pp-related-grid" id="pp-related-grid"></div>
+      <div id="pp-add-wrap"></div>
+      <div class="pp-related" id="pp-related" style="display:none">
+        <div class="pp-related-title">✨ منتجات مشابهة</div>
+        <div class="pp-related-grid" id="pp-related-grid"></div>
+      </div>
     </div>
   </div>
 </div>
