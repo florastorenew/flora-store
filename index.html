@@ -151,10 +151,10 @@ nav a:hover::after { width:100%; }
 
 .hero-content { text-align:center; z-index:1; padding:2rem; animation:heroIn 1s ease forwards; }
 @keyframes heroIn { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
-.hero-badge { display:inline-flex; align-items:center; gap:0.5rem; padding:0.4rem 1.2rem; border:1px solid var(--rose-light); border-radius:30px; font-size:0.75rem; letter-spacing:3px; color:var(--rose); text-transform:uppercase; margin-bottom:1.5rem; background:rgba(255,255,255,0.6); }
-.hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(3.5rem,9vw,7.5rem); font-weight:300; line-height:1.05; color:var(--dark); margin-bottom:0.3rem; }
-.hero h1 em { font-style:italic; color:var(--rose); display:inline; }
-.hero-desc { font-size:1rem; color:var(--text-light); max-width:420px; margin:1.2rem auto 2.5rem; line-height:1.8; font-weight:300; }
+.hero-badge { display:inline-flex; align-items:center; gap:0.5rem; padding:0.5rem 1.5rem; border:1px solid rgba(240,160,176,0.4); border-radius:30px; font-size:0.72rem; letter-spacing:4px; color:var(--rose-light); text-transform:uppercase; margin-bottom:2rem; background:rgba(212,104,122,0.12); backdrop-filter:blur(4px); }
+.hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(4rem,10vw,8.5rem); font-weight:300; line-height:1; color:#fff; margin-bottom:0.5rem; text-shadow:0 4px 30px rgba(0,0,0,0.3); }
+.hero h1 em { font-style:italic; color:var(--gold-light); display:inline; text-shadow:0 0 40px rgba(212,168,67,0.4); }
+.hero-desc { font-size:1.05rem; color:rgba(255,255,255,0.75); max-width:480px; margin:1.5rem auto 3rem; line-height:2; font-weight:300; letter-spacing:0.3px; }
 .hero-actions { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
 .btn-primary { padding:0.9rem 2.5rem; background:linear-gradient(135deg,var(--rose),var(--rose-deep)); color:#fff; border:none; border-radius:50px; font-family:'Tajawal',sans-serif; font-size:0.95rem; font-weight:600; cursor:pointer; letter-spacing:1px; box-shadow:0 8px 25px rgba(201,123,132,0.35); transition:all 0.3s; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; }
 .btn-primary:hover { transform:translateY(-3px); box-shadow:0 15px 35px rgba(201,123,132,0.45); }
@@ -176,10 +176,10 @@ section { padding:6rem 3rem; position:relative; background:transparent; }
 
 
 .section-header { text-align:center; margin-bottom:4rem; }
-.section-tag { font-size:0.7rem; letter-spacing:4px; color:var(--gold); text-transform:uppercase; font-weight:600; margin-bottom:0.8rem; display:block; }
-.section-title { font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:400; color:var(--dark); line-height:1.15; }
+.section-tag { font-size:0.68rem; letter-spacing:5px; color:var(--gold-light); text-transform:uppercase; font-weight:700; margin-bottom:1rem; display:block; }
+.section-title { font-family:'Cormorant Garamond',serif; font-size:clamp(2.2rem,5vw,4rem); font-weight:300; color:#fff; line-height:1.1; letter-spacing:-0.5px; }
 .section-title em { font-style:italic; color:var(--rose); }
-.section-line { width:60px; height:1px; background:linear-gradient(90deg,transparent,var(--rose),transparent); margin:1.2rem auto 0; }
+.section-line { width:120px; height:1px; background:linear-gradient(90deg,transparent,var(--gold-light),var(--rose-light),transparent); margin:1.5rem auto 0; }
 
 /* CATEGORIES */
 .categories-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1.5rem; max-width:900px; margin:0 auto; }
@@ -205,23 +205,28 @@ section { padding:6rem 3rem; position:relative; background:transparent; }
 .filter-sort option { background:#3d1a20; color:#fff; }
 .products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:2rem; max-width:1200px; margin:0 auto; }
 @media(max-width:768px) { .products-grid { grid-template-columns:repeat(2,1fr); gap:0.8rem; } .product-name { font-size:0.85rem; } .product-price { font-size:0.95rem; } .product-info { padding:0.8rem; } }
-.product-card { background:#fff; border-radius:20px; overflow:hidden; border:1px solid rgba(201,123,132,0.08); transition:all 0.4s; position:relative; cursor:pointer; }
-.product-card:hover { transform:translateY(-10px); box-shadow:var(--shadow-hover); }
+.product-card { background:rgba(255,255,255,0.08); border-radius:20px; overflow:hidden; border:1px solid rgba(255,255,255,0.12); transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position:relative; cursor:pointer; }
+.product-card:hover { transform:translateY(-12px) scale(1.02); box-shadow:0 25px 60px rgba(184,64,96,0.4); border-color:rgba(240,160,176,0.4); }
 .product-img-wrap { position:relative; overflow:hidden; aspect-ratio:1/1; background:var(--rose-pale); }
 .product-img-wrap img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s ease; }
-.product-card:hover .product-img-wrap img { transform:scale(1.08); }
-.product-badge { position:absolute; top:1rem; right:1rem; background:linear-gradient(135deg,var(--rose),var(--rose-deep)); color:#fff; padding:0.3rem 0.8rem; border-radius:20px; font-size:0.7rem; font-weight:700; letter-spacing:1px; }
+.product-card:hover .product-img-wrap img { transform:scale(1.1); }
+.product-img-wrap::after { content:''; position:absolute; inset:0; background:linear-gradient(to top, rgba(184,64,96,0.5) 0%, rgba(107,31,58,0.2) 50%, transparent 100%); opacity:0; transition:opacity 0.4s ease; z-index:1; pointer-events:none; }
+.product-card:hover .product-img-wrap::after { opacity:1; }
+.product-badge { position:absolute; top:0; right:0; background:linear-gradient(135deg,var(--gold),#b8860b); color:#1a0d14; padding:0.35rem 1.2rem 0.35rem 0.8rem; font-size:0.68rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; clip-path:polygon(0 0,100% 0,100% 100%,8% 100%); z-index:3; box-shadow:-2px 2px 8px rgba(0,0,0,0.3); }
+.product-badge.badge-new { background:linear-gradient(135deg,#e74c3c,#c0392b); color:#fff; }
+.product-badge.badge-hot { background:linear-gradient(135deg,#f39c12,#d68910); color:#fff; }
+.product-badge.badge-special { background:linear-gradient(135deg,var(--rose),var(--rose-deep)); color:#fff; }
 .product-no-img { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:4rem; background:linear-gradient(135deg,var(--rose-pale),var(--nude)); }
 .product-actions-overlay { position:absolute; bottom:1rem; left:50%; transform:translateX(-50%) translateY(10px); display:flex; gap:0.5rem; opacity:0; transition:all 0.3s; }
 .product-card:hover .product-actions-overlay { opacity:1; transform:translateX(-50%) translateY(0); }
 .overlay-btn { width:38px; height:38px; background:#fff; border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 15px rgba(0,0,0,0.1); color:var(--text); font-size:0.9rem; transition:all 0.3s; }
 .overlay-btn:hover { background:var(--rose); color:#fff; transform:scale(1.1); }
-.product-info { padding:0.7rem; }
-.product-name { font-family:'Playfair Display',serif; font-size:0.85rem; font-weight:600; color:var(--dark); margin-bottom:0.3rem; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; line-height:1.4; }
+.product-info { padding:0.9rem 0.85rem 0.8rem; }
+.product-name { font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:600; color:#fff; margin-bottom:0.4rem; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; line-height:1.4; letter-spacing:0.2px; }
 .product-desc { display:none; }
 .product-footer { display:flex; align-items:center; justify-content:space-between; }
-.product-price { font-size:1.1rem; font-weight:700; color:var(--rose-deep); }
-.product-price span { font-size:0.8rem; font-weight:400; color:var(--text-light); }
+.product-price { font-size:1.15rem; font-weight:700; color:var(--gold-light); letter-spacing:0.5px; }
+.product-price span { font-size:0.78rem; font-weight:400; color:rgba(255,255,255,0.45); margin-right:2px; }
 .add-cart-btn { width:38px; height:38px; background:linear-gradient(135deg,var(--rose),var(--rose-deep)); border:none; border-radius:50%; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1rem; transition:all 0.3s; box-shadow:0 4px 15px rgba(201,123,132,0.3); }
 .add-cart-btn:hover { transform:scale(1.15); }
 .empty-state { text-align:center; padding:4rem; color:var(--text-light); grid-column:1/-1; }
@@ -717,6 +722,10 @@ nav a:hover { color: var(--rose-light) !important; }
 .petal-section { position:relative; overflow:hidden; }
 .section-petals { position:absolute; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
 
+
+/* Product card gradient bottom */
+.product-info { background:linear-gradient(to top, rgba(26,13,20,0.9) 0%, rgba(26,13,20,0.6) 60%, transparent 100%); }
+
 </style>
 </head>
 <body>
@@ -784,9 +793,9 @@ nav a:hover { color: var(--rose-light) !important; }
   <div class="hero-bg"></div>
   <div class="petals-wrap" id="petals"></div>
   <div class="hero-content">
-    <div class="hero-badge">✦ كوليكشن جديد ✦</div>
+    <div class="hero-badge">✦ New Collection 2025 ✦</div>
     <h1>اكتشفي <em>Flora</em></h1>
-    <p class="hero-desc">كل إكسسوار، كل تفصيلة، كل هدية — مصممة خصيصاً لتعكس أناقتك وروحك الرقيقة 🌸</p>
+    <p class="hero-desc">كل إكسسوار بيحكي قصة — مصمم بحب، مختار بعناية، مغلف بأناقة 🌸<br><span style="font-size:0.9rem;opacity:0.7">توصيل لكل محافظات مصر</span></p>
     <div class="hero-actions">
       <a href="#products" class="btn-primary"><i class="fas fa-star"></i> تسوقي الآن</a>
       <a href="#social" class="btn-secondary"><i class="fab fa-whatsapp"></i> تواصلي معنا</a>
@@ -799,6 +808,11 @@ nav a:hover { color: var(--rose-light) !important; }
 </section>
 
 <!-- CATEGORIES -->
+<div style="width:100%;overflow:hidden;line-height:0;margin-bottom:-1px">
+  <svg viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:40px">
+    <path d="M0,20 C360,40 1080,0 1440,20 L1440,0 L0,0 Z" fill="rgba(212,104,122,0.15)"/>
+  </svg>
+</div>
 <section id="categories" class="reveal petal-section">
   <div class="section-header">
     <span class="section-tag">✦ Shop by Category</span>
@@ -854,6 +868,11 @@ nav a:hover { color: var(--rose-light) !important; }
 </section>
 
 <!-- PRODUCTS -->
+<div style="width:100%;overflow:hidden;line-height:0;margin-bottom:-1px">
+  <svg viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:50px">
+    <path d="M0,0 C480,50 960,0 1440,30 L1440,0 Z" fill="rgba(184,64,96,0.12)"/>
+  </svg>
+</div>
 <section id="products" class="reveal petal-section">
   <div class="section-header">
     <span class="section-tag">✦ كوليكشننا</span>
