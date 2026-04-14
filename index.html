@@ -726,6 +726,23 @@ nav a:hover { color: var(--rose-light) !important; }
 /* Product card gradient bottom */
 .product-info { background:linear-gradient(to top, rgba(26,13,20,0.9) 0%, rgba(26,13,20,0.6) 60%, transparent 100%); }
 
+
+/* GUARANTEE BAR */
+.guarantee-bar { background:linear-gradient(135deg,rgba(26,13,20,0.95),rgba(46,16,32,0.95)); border-top:1px solid rgba(240,160,176,0.2); border-bottom:1px solid rgba(240,160,176,0.2); padding:0.7rem 2rem; display:flex; align-items:center; justify-content:center; gap:2rem; flex-wrap:wrap; position:relative; z-index:5; }
+.guarantee-item { display:flex; align-items:center; gap:0.5rem; font-size:0.78rem; color:rgba(255,255,255,0.8); letter-spacing:0.5px; white-space:nowrap; }
+.guarantee-item i { color:var(--gold-light); font-size:0.9rem; }
+.guarantee-sep { color:rgba(240,160,176,0.3); font-size:0.8rem; }
+@media(max-width:480px) { .guarantee-bar { gap:1rem; padding:0.6rem 1rem; } .guarantee-item { font-size:0.72rem; } .guarantee-sep { display:none; } }
+
+/* LIVE BUYER TOAST */
+.live-toast { position:fixed; bottom:5rem; left:1rem; z-index:1400; background:rgba(26,13,20,0.95); border:1px solid rgba(240,160,176,0.25); border-radius:14px; padding:0.7rem 1rem; display:flex; align-items:center; gap:0.7rem; max-width:260px; transform:translateX(-120%); transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275); box-shadow:0 8px 30px rgba(0,0,0,0.3); }
+.live-toast.show { transform:translateX(0); }
+.live-toast-img { width:38px; height:38px; border-radius:10px; background:rgba(212,104,122,0.2); display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+.live-toast-text { flex:1; }
+.live-toast-name { font-size:0.78rem; font-weight:700; color:#fff; margin-bottom:0.1rem; }
+.live-toast-action { font-size:0.7rem; color:rgba(255,255,255,0.5); }
+.live-toast-time { font-size:0.65rem; color:var(--gold-light); }
+
 </style>
 </head>
 <body>
@@ -787,6 +804,17 @@ nav a:hover { color: var(--rose-light) !important; }
     </button>
   </div>
 </header>
+
+<!-- GUARANTEE BAR -->
+<div class="guarantee-bar">
+  <div class="guarantee-item"><i class="fas fa-shield-alt"></i> جودة مضمونة 100%</div>
+  <span class="guarantee-sep">✦</span>
+  <div class="guarantee-item"><i class="fas fa-gift"></i> تغليف هدايا مجاني</div>
+  <span class="guarantee-sep">✦</span>
+  <div class="guarantee-item"><i class="fas fa-truck"></i> توصيل لكل مصر</div>
+  <span class="guarantee-sep">✦</span>
+  <div class="guarantee-item"><i class="fab fa-whatsapp"></i> دعم على واتساب</div>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="home">
@@ -883,6 +911,7 @@ nav a:hover { color: var(--rose-light) !important; }
     <span class="filter-count" id="filter-count"></span>
     <select class="filter-sort" onchange="sortProducts(this.value)">
       <option value="default">الترتيب الافتراضي</option>
+      <option value="newest">الأحدث أولاً</option>
       <option value="price-asc">السعر: من الأقل للأعلى</option>
       <option value="price-desc">السعر: من الأعلى للأقل</option>
     </select>
@@ -1014,6 +1043,16 @@ nav a:hover { color: var(--rose-light) !important; }
     </button>
   </div>
 </nav>
+
+<!-- LIVE BUYER TOAST -->
+<div class="live-toast" id="live-toast">
+  <div class="live-toast-img" id="live-toast-img">🌸</div>
+  <div class="live-toast-text">
+    <div class="live-toast-name" id="live-toast-name">شخص من القاهرة</div>
+    <div class="live-toast-action" id="live-toast-action">اشترى للتو 🔥</div>
+    <div class="live-toast-time" id="live-toast-time">منذ دقيقتين</div>
+  </div>
+</div>
 
 <!-- FLOATING WHATSAPP -->
 <a href="https://wa.me/201147106979" target="_blank" class="float-wa" title="تواصلي معنا على واتساب">
@@ -1488,6 +1527,7 @@ window.addEventListener('load', () => {
   initRipple();
   updateBnavCart();
   checkHashOnLoad();
+  initLiveBuyer();
 });
 
 
@@ -1674,6 +1714,7 @@ function sortProducts(val) {
   let list = currentCategory === 'all' ? [...products] : products.filter(p => p.category === currentCategory);
   if (val === 'price-asc') list.sort((a,b) => a.price - b.price);
   if (val === 'price-desc') list.sort((a,b) => b.price - a.price);
+  if (val === 'newest') list.sort((a,b) => String(b.id).localeCompare(String(a.id)));
   renderProducts(list);
 }
 
@@ -2416,6 +2457,8 @@ function loadAdminProducts() {
         <div class="admin-p-price">${p.price.toLocaleString()} جم · ${catNames[p.category]||p.category}${p.stock !== null && p.stock !== undefined ? `<span style='background:#e8f5e9;color:#27ae60;font-size:0.65rem;padding:0.1rem 0.4rem;border-radius:8px;margin-right:0.3rem'>📦 ${p.stock}</span>` : ''}</div>
       </div>
       <div class="admin-p-actions">
+        <button class="admin-p-btn" onclick="moveProduct('${p.id}',-1)" style="background:rgba(255,255,255,0.1);color:#fff;font-size:0.8rem" title="تحريك لأعلى">↑</button>
+        <button class="admin-p-btn" onclick="moveProduct('${p.id}',1)" style="background:rgba(255,255,255,0.1);color:#fff;font-size:0.8rem" title="تحريك لأسفل">↓</button>
         <button class="admin-p-btn edit" onclick="editProduct('${p.id}')">✏️ تعديل</button>
         <button class="admin-p-btn ${p.outOfStock?'instock':'oos'}" onclick="toggleOutOfStock('${p.id}')">${p.outOfStock?'✅ متاح':'🚫 خلص'}</button>
         <button class="admin-p-btn del" onclick="deleteProduct('${p.id}')">🗑️</button>
@@ -2702,6 +2745,53 @@ function checkHashOnLoad() {
       if (products.length > 0) openProductPage(id);
     }, 1000);
   }
+}
+
+// ===== LIVE BUYER TOAST =====
+const liveNames = ['سارة','نور','ياسمين','مريم','هنا','لمياء','رنا','دينا','آية','ميار','سلمى','غادة'];
+const liveCities = ['القاهرة','الإسكندرية','الجيزة','المنصورة','طنطا','الإسماعيلية','أسوان','الأقصر','بورسعيد','السويس'];
+
+function showLiveBuyer() {
+  if (!products.length) return;
+  const p = products[Math.floor(Math.random() * products.length)];
+  const name = liveNames[Math.floor(Math.random() * liveNames.length)];
+  const city = liveCities[Math.floor(Math.random() * liveCities.length)];
+  const mins = Math.floor(Math.random() * 10) + 1;
+  const toast = document.getElementById('live-toast');
+  const img = document.getElementById('live-toast-img');
+  const nameEl = document.getElementById('live-toast-name');
+  const actionEl = document.getElementById('live-toast-action');
+  const timeEl = document.getElementById('live-toast-time');
+  if (!toast) return;
+  img.textContent = p.emoji || catEmoji[p.category] || '🌸';
+  if (p.img || p.image) img.innerHTML = `<img src="${p.img||p.image}" style="width:38px;height:38px;border-radius:10px;object-fit:cover">`;
+  nameEl.textContent = `${name} من ${city}`;
+  actionEl.textContent = `اشترت "${p.name.substring(0,20)}..." 🔥`;
+  timeEl.textContent = `منذ ${mins} ${mins === 1 ? 'دقيقة' : 'دقائق'}`;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+function initLiveBuyer() {
+  // Show first one after 8 seconds, then every 25-45 seconds
+  setTimeout(() => {
+    showLiveBuyer();
+    setInterval(showLiveBuyer, 30000 + Math.random() * 15000);
+  }, 8000);
+}
+
+// ===== MOVE PRODUCT (manual ordering) =====
+function moveProduct(id, direction) {
+  const idx = products.findIndex(p => String(p.id) === String(id));
+  if (idx === -1) return;
+  const newIdx = idx + direction;
+  if (newIdx < 0 || newIdx >= products.length) return;
+  // Swap
+  [products[idx], products[newIdx]] = [products[newIdx], products[idx]];
+  localStorage.setItem('flora_products', JSON.stringify(products));
+  loadAdminProducts();
+  renderProducts(currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory));
+  showToast('↕️ تم تحريك المنتج', 'happy');
 }
 
 function secretClick() {
